@@ -1,4 +1,4 @@
-# Project VIKRAM
+# Project Hindawi
 ### An inclusive rural digitalization platform inspired by the principles of GramSheel
 
 <b>V</b>irtualized         <br>
@@ -15,7 +15,7 @@ Launched 3rd May 2020
 
 ### गाँव बढ़ेंगे तो सब बढ़ेंगे
 
-Note: This is an initial announcement. Project VIKRAM is a project to make rural digitalization accessible, inclusive and democratized (as in equal opportunity not political). The project works on the digitalization of at least the  following areas.
+Note: Also known as the Hindawi Programming System since 2003. Project Hindawi is a project to make digitalization accessible through non-English mother tongue based programming languages, making technology development inclusive and democratized (as in equal opportunity not political).   Some highlights of Project Hindawi.
 
 1. Education
 

@@ -2,7 +2,7 @@
 layout: single
 permalink: /
 hidden: true
-title: Project VIKRAM
+title: Project Hindawi
 header:
   overlay_color: "#4d2e00"
   overlay_image: https://upload.wikimedia.org/wikipedia/commons/a/a0/Ploughing_with_cattle_in_West_Bengal.jpg
@@ -13,26 +13,26 @@ excerpt: >
   An inclusive rural digitalization platform<br/>
   inspired by the principles of GramSheel<br/>
   गाँव बढ़ेंगे तो सब बढ़ेंगे<br/>
-  <small><a href="https://obonac-works.github.io/about/">More about Project VIKRAM</a></small>
+  <small><a href="https://obonac-works.github.io/about/">More about Project Hindawi</a></small>
 feature_row:
   - image_path: /assets/images/vikram-h4all.jpg
     alt: "health4all"
     title: "Healthcare for All"
-    excerpt: "Healthcare is basic dignity of human life in modern civilization. Project VIKRAM is setting up the tools for an accessible virtual hospital"
+    excerpt: "Healthcare is basic dignity of human life in modern civilization. Project Hindawi is setting up the tools for an accessible virtual hospital"
     url: "/virtual-hospital/"
     btn_class: "btn--primary"
     btn_label: "Learn more"
   - image_path: /assets/images/sing-tech.jpg
     alt: "democratised singularity"
     title: "Singularity Technologies for All"
-    excerpt: "Science and technology have ushered in a new era for our species, but the advances have also ridged new divides. Project VIKRAM is developing technologies to bridge the current digital divide and the impending cognitive divide"
+    excerpt: "Science and technology have ushered in a new era for our species, but the advances have also ridged new divides. Project Hindawi is developing technologies to bridge the current digital divide and the impending cognitive divide"
     url: "/tech4all/"
     btn_class: "btn--primary"
     btn_label: "Learn more"
   - image_path: /assets/images/hindawi-progg-sys.jpg
     alt: "language neutrality"
     title: "Language Neutral Technologies"
-    excerpt: "Free as in freedom! True freedom can only be achieved in the most creative states of mind. The mind is most creative when free to work with the mother tongue. Project VIKRAM together with Project Hindawi is ushering in lanaguage neutrality across technical domains."
+    excerpt: "Free as in freedom! True freedom can only be achieved in the most creative states of mind. The mind is most creative when free to work with the mother tongue. Project Hindawi together with Project Hindawi is ushering in lanaguage neutrality across technical domains."
     url: "/project-hindawi/"
     btn_class: "btn--primary"
     btn_label: "Learn more"      
@@ -54,7 +54,7 @@ Launched 3rd May 2020
 
 ### गाँव बढ़ेंगे तो सब बढ़ेंगे
 
-Note: This is an initial announcement. Project VIKRAM is a project to make rural digitalization accessible, inclusive and democratized (as in equal opportunity not political). The project works on the digitalization of at least the  following areas.
+Note: Also known as the Hindawi Programming System since 2003. Project Hindawi is a project to make digitalization accessible through non-English mother tongue based programming languages, making technology development inclusive and democratized (as in equal opportunity not political).   Some highlights of Project Hindawi.
 
 1. Education
 
