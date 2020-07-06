@@ -5,7 +5,7 @@ hidden: true
 title: Project Hindawi
 header:
   overlay_color: "#4d2e00"
-  overlay_image: https://upload.wikimedia.org/wikipedia/commons/a/a0/Ploughing_with_cattle_in_West_Bengal.jpg
+  overlay_image: https://docs.google.com/drawings/d/e/2PACX-1vSfAv6VRBL0AjHbgMnBzyhsICyvEDZfoV0bY43s72e6_ACgZ3N9R4OC33cYCErPeAxs9DhDmT_6veH3/pub?w=4110&h=2621
   actions:
     - label: "<i class='fas fa-github'></i> Join us"
       url: "/join-us/"
