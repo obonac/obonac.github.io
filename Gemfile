@@ -77,15 +77,25 @@ author:
 
 footer:
   links:
-    - label: "Twitter"
-      icon: "fab fa-fw fa-twitter-square"
-      url: "https://twitter.com/"
-    - label: "GitHub"
-      icon: "fab fa-fw fa-github"
-      url: "https://github.com/"
-    - label: "Instagram"
-      icon: "fab fa-fw fa-instagram"
-      url: "https://instagram.com/"
+    - label: "Advisors"
+      icon: "fas fa-fw fa-award"
+      url: "/advisors/"
+    - label: "Team"
+      icon: "fas fa-fw fa-users-cog"
+      url: "/team/"
+    - label: "Partners"
+      icon: "fas fa-fw fa-handshake"
+      url: "/partners/"
+    - label: "License"
+      icon: "fas fa-fw fa-file-contract"
+      url: "/license/"
+    - label: "Privacy Policy"
+      icon: "fas fa-fw fa-mask"
+      url: "/privacy/"
+    - label: "Term & Conditions"
+      icon: "fas fa-fw fa-balance-scale-right"
+      url: "/terms/"
+
 
 defaults:
   # _pages
