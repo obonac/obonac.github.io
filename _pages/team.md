@@ -1,9 +1,7 @@
 ---
 permalink: /team/
-title: Team 4 All
+title: Team 
 ---
-
-# Team Project VIKRAM
 
 <img src="https://projectvikram.github.io/restricted_assets/images/ac_photo.jpg" alttext="Abhishek Choudhary (avatar image)" width="300" height="300">
 
@@ -26,7 +24,7 @@ He is multidisciplinary trained in Pre-clinical Medicine, Neural Engineering, Me
 <img src="https://projectvikram.github.io/restricted_assets/images/dr_srija.jpg" alttext="Dr Srija Katta (avatar image)" width="300" height="300">
 
 ## Dr Srija Katta 
-###Co-ordinator and Volunteer
+### Co-ordinator
 #### @srija-ieee
 
 Dr Srija is the Co-Founder of AyeAI Consulting and heads Company Operations and Pharma lab. She is a Director at Vyas Labs Pvt Ltd and Interglial Healthcare (OPC) Pvt Ltd. 
