@@ -11,8 +11,6 @@ header:
       url: "/join-us/"
 excerpt: >
   Programming in Your Mother Tongue<br/>
-  inspired by the principles of GramSheel<br/>
-  गाँव बढ़ेंगे तो सब बढ़ेंगे<br/>
   <small><a href="https://obonac-works.github.io/about/">More about Project Hindawi</a></small>
 feature_row:
   - image_path: /assets/images/hindawi-progg-sys.jpg
