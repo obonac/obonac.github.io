@@ -18,16 +18,13 @@ main:
   - title: Recognitions
     url: /recognitions/
 
-  - title: Industries
-    url: /industries/
-  - title: Education
-    url: /education/
+  - title: Learning Resources
+    url: /resources/
+ 
 
   - title: Innovations in Hindawi
     url: /innovations/
 
-  - title: Learning Resources
-    url: /peace/
   - title: "Categories"
     url: /categories/
   - title: "Tags"
