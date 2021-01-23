@@ -16,23 +16,9 @@
 title: Project Hindawi
 email:
 description: >- # this means to ignore newlines until "baseurl:"
-  An inclusive rural digitalization platform inspired by the principles of GramSheel
-    Virtualized
-    Infrastructure
-    for
-    Knowledge-driven
-    Rural
-    Ascension
-    Management
-  गाँव बढ़ेंगे तो सब बढ़ेंगे
-  Project Hindawi is a project to make digitalization accessible through non-English mother tongue based programming languages, making technology development inclusive and democratized (as in equal opportunity not political).  Some highlights of Project Hindawi.
-    1. Education
-    2. Healthcare
-    3. Livelihood (ISIC domains of economic activities)
-    4. Social Justice
-    5. Habitat and Environment
-    6. Agriculture and Food
-    7. Peace and harmony through social dialog 
+  Hindawi is a free, open-source, complete non-English based systems programming platform supporting all paradigms of programming languages from assembly language  to logic and functional programming, which effectively shatters the language barrier allowing non English literates to take up computer sciences and revolution  at all levels of technology, from primary school education to robotics and super-computing in their mother tongue, without the need to master English.
+
+ It is a suite of open-source Indic programming languages. It includes compilers for the equivalents of C, C++, lex, yacc, assembly, BASIC, Ada etc. in Hindi,  Bangla, Gujrati, Assomiya, Nepali and other Indian languages. These localized programming languages are known as Shaili, e.g. Indic C is Shaili Guru, Indic C++  is Shaili Shraenibadha, Indic Assembly is Shaili Yantrik and so on.
 twitter_username: username
 github_username: username
 minimal_mistakes_skin: dirt
