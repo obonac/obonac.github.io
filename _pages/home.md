@@ -11,7 +11,7 @@ header:
       url: "/join-us/"
 excerpt: >
   Programming in Your Mother Tongue<br/>
-  <small><a href="https://obonac-works.github.io/about/">More about Project Hindawi</a></small>
+  <small><a href="about/">More about Project Hindawi</a></small>
 feature_row:
   - image_path: /assets/images/hindawi-progg-sys.jpg
     alt: "language neutrality"
