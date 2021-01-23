@@ -15,11 +15,9 @@ main:
     
   - title: Technology
     url: /technology/
-  - title: Resources
-    url: /resources/
+  - title: Recognitions
+    url: /recognitions/
 
-  - title: Livelihood
-    url: /livelihood/
   - title: Industries
     url: /industries/
   - title: Education
@@ -27,15 +25,7 @@ main:
 
   - title: Healthcare & Biosciences
     url: /health/
-  - title: Food Processing & Agriculture
-    url: /food_processing_and_agriculture/
-  - title: Space Exploration
-    url: /space_exploration/
-  - title: Environment & Habitat
-    url: /environment_and_habitat/
 
-  - title: Socialising
-    url: /socialising/
   - title: Justice
     url: /justice/
   - title: Peace
