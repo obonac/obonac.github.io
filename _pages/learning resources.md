@@ -2,11 +2,8 @@
 permalink: /resources/
 title: Learning Resources
 ---
-
-Hindawi Programming System aims for a billion codes challenge. 
-
-Find the Introduction Video below 
-
+ Introduction to Hindawi Programming System :
+ 
 <style>
 .responsive-wrap iframe{ max-width: 100%;}
 </style>
@@ -14,3 +11,4 @@ Find the Introduction Video below
 <!-- this is the embed code provided by Google -->
 <iframe width="560" height="315" src="https://www.youtube.com/embed/Z6eCI_rAP1w" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 </div>
+
