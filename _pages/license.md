@@ -1,6 +1,6 @@
 ---
-permalink: /projects/
-title: Projects 
+permalink: /license/
+title: License
 ---
 
 
