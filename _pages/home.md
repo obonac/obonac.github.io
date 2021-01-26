@@ -16,15 +16,13 @@ feature_row:
   - image_path: /assets/images/hindawi-progg-sys.jpg
     alt: "language neutrality"
     title: "Language Neutral Technologies"
-    excerpt: "Free as in freedom! True freedom can only be achieved in the most creative states of mind. The mind is most creative when free to work with the mother tongue. Project Hindawi together with Project Hindawi is ushering in lanaguage neutrality across technical domains."
+    excerpt: "Free as in freedom! True freedom can only be achieved in the most creative states of mind. The mind is most creative when free to work with the mother tongue. Project VIKRAM together with Project Hindawi is ushering in lanaguage neutrality across technical domains."
     url: "/project-hindawi/"
     btn_class: "btn--primary"
     btn_label: "Learn more"      
 ---
 
 {% include feature_row %}
-
-### गाँव बढ़ेंगे तो सब बढ़ेंगे
 
 Hindawi is an open-source, complete non-English based systems programming platform supporting all paradigms of programming languages from assembly language to logic and functional programming, which effectively shatters the language barrier allowing non English literates to take up computer sciences and revolution at all levels of technology, from primary school education to robotics and super-computing in their mother tongue, without the need to master English.
 
