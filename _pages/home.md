@@ -12,7 +12,7 @@ header:
 excerpt: >
   Programming in Your Mother Tongue<br/>
   <small><a href="about/">More about Project Hindawi</a></small>
-feature_row:
+feature_column:
   - image_path: /assets/images/hindawi-progg-sys.jpg
     alt: "language neutrality"
     title: "Language Neutral Technologies"
