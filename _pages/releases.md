@@ -12,7 +12,5 @@ Release of Linux port under Sarai fellowship - 16 August 2006
 
 ### Current Version :
 
-Hindawi 2020.1
-
-
+Under development 
 [Hindawi 2020.1]: https://github.com/hindawiai/hindawi2020
