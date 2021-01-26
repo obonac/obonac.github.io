@@ -22,7 +22,7 @@ feature_column:
     btn_label: "Learn more"      
 ---
 
-{% include feature_row %}
+{% include feature_column %}
 
 Hindawi is an open-source, complete non-English based systems programming platform supporting all paradigms of programming languages from assembly language to logic and functional programming, which effectively shatters the language barrier allowing non English literates to take up computer sciences and revolution at all levels of technology, from primary school education to robotics and super-computing in their mother tongue, without the need to master English.
 
