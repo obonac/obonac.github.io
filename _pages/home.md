@@ -12,7 +12,7 @@ header:
 excerpt: >
   Programming in Your Mother Tongue<br/>
   <small><a href="about/">More about Project Hindawi</a></small>
-feature_column:
+feature_row:
   - image_path: /assets/images/hindawi-progg-sys.jpg
     alt: "language neutrality"
     title: "Language Neutral Technologies"
@@ -22,7 +22,7 @@ feature_column:
     btn_label: "Learn more"      
 ---
 
-{% include feature_column %}
+{% include feature_row %}
 
 Hindawi is an open-source, complete non-English based systems programming platform supporting all paradigms of programming languages from assembly language to logic and functional programming, which effectively shatters the language barrier allowing non English literates to take up computer sciences and revolution at all levels of technology, from primary school education to robotics and super-computing in their mother tongue, without the need to master English.
 
