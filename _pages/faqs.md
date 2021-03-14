@@ -1,11 +1,10 @@
 ---
-permalink: /about/
-title: "About"
+permalink: /faqs/
+title: "Frequently Asked Questions"
 ---
 
-## Frequently Asked Questions
-
 ### How many languages does the Hindawi Programming System support?
+
 All written languages we have currently volunteers for Hindi, Bengali, and Telugu, we are looking for volunteers to translate into other languages.
 
 Click here to join us. 
