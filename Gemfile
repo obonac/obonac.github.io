@@ -13,7 +13,7 @@
 # you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
-title: Project Hindawi
+title : Project Hindawi
 email:
 description: >- # this means to ignore newlines until "baseurl:"
   Hindawi is an open-source, complete non-English based systems programming platform supporting all paradigms of programming languages from assembly language  to logic and functional programming, which effectively shatters the language barrier allowing non English literates to take up computer sciences and revolution  at all levels of technology, from primary school education to robotics and super-computing in their mother tongue, without the need to master English.
