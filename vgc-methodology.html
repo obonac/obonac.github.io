@@ -1,0 +1,813 @@
+<!doctype html>
+<!--
+  Verification-Gated Human–AI Co-Development: A Methodology and Cost Analysis
+  A research preprint. Case study: the CHAKRA Temporal Cycle Observatory.
+
+  Copyright (C) 2026 Abhishek Choudhary. All rights reserved.
+  This document may be shared for scholarly and non-commercial purposes with
+  attribution. The methodology, figures, and analysis are the author's work,
+  developed in collaboration with an AI system (Anthropic Claude) as described
+  herein. SPDX-License-Identifier: CC-BY-NC-4.0
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Verification-Gated Human–AI Co-Development — A Methodology &amp; Cost Analysis</title>
+<meta name="description" content="A preprint describing a reproducible methodology for high-assurance software co-development between a senior architect and an AI system, with a quantitative cost-benefit analysis. Case study: a 74-file, six-language astronomical engine built in hours.">
+<meta name="author" content="Abhishek Choudhary">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* Palette — an observatory at night, disciplined for print credibility.
+       Ink-on-vellum body; the collaboration ledger carries the two-track accent. */
+    --paper:#faf8f3;         /* warm vellum, but cooler than the AI-default cream */
+    --paper-edge:#f0ece1;
+    --ink:#1a1f2b;           /* near-black slate, not pure black */
+    --ink-soft:#41485a;
+    --faint:#8189a0;
+    --hair:#d9d3c6;          /* hairline rule */
+    --rule:#c8c0b0;
+    --intent:#7a3b2e;        /* HUMAN track — burnt sienna (director's ink) */
+    --intent-bg:#f6ede9;
+    --exec:#1c4a63;          /* AI track — observatory blue (executor's ink) */
+    --exec-bg:#e9f0f4;
+    --gold:#9a7420;          /* accent, used once or twice only */
+    --link:#1c4a63;
+    --serif:"Spectral",Georgia,"Times New Roman",serif;
+    --display:"Newsreader","Spectral",Georgia,serif;
+    --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  html{font-size:17px;-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{margin:0;background:var(--paper);color:var(--ink);
+    font-family:var(--serif);line-height:1.62;font-weight:400;
+    text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased}
+  ::selection{background:#e7dcc9}
+
+  .sheet{max-width:820px;margin:0 auto;padding:0 28px}
+  @media(max-width:640px){.sheet{padding:0 20px}}
+
+  /* ── masthead ─────────────────────────────────────────── */
+  header.masthead{padding:64px 0 30px;border-bottom:2px solid var(--ink)}
+  .eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.32em;
+    text-transform:uppercase;color:var(--faint);margin-bottom:20px}
+  h1.title{font-family:var(--display);font-weight:500;
+    font-size:clamp(30px,5.4vw,50px);line-height:1.08;letter-spacing:-.012em;
+    margin:0 0 8px;color:var(--ink)}
+  h1.title .sub{display:block;font-size:clamp(17px,2.6vw,23px);font-weight:400;
+    font-style:italic;color:var(--ink-soft);margin-top:12px;letter-spacing:0}
+  .byline{margin-top:26px;font-family:var(--mono);font-size:12.5px;color:var(--ink-soft)}
+  .byline .name{color:var(--ink);font-weight:600;letter-spacing:.02em}
+  .byline .affil{color:var(--faint)}
+  .meta-row{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:16px;
+    font-family:var(--mono);font-size:11px;color:var(--faint);letter-spacing:.04em}
+  .meta-row .tag{border:1px solid var(--hair);border-radius:2px;padding:2px 9px}
+
+  /* ── abstract ─────────────────────────────────────────── */
+  .abstract{margin:34px 0 10px;padding:26px 30px;background:var(--paper-edge);
+    border-left:3px solid var(--gold)}
+  .abstract h2{font-family:var(--mono);font-size:11px;letter-spacing:.28em;
+    text-transform:uppercase;color:var(--faint);margin:0 0 12px}
+  .abstract p{margin:0 0 12px;font-size:16px;line-height:1.66}
+  .abstract p:last-child{margin-bottom:0}
+  .abstract .kw{font-family:var(--mono);font-size:12px;color:var(--ink-soft);
+    margin-top:14px;padding-top:14px;border-top:1px solid var(--hair)}
+  .abstract .kw b{color:var(--intent);font-weight:600}
+
+  /* ── section structure ────────────────────────────────── */
+  section{padding:38px 0}
+  section + section{border-top:1px solid var(--hair)}
+  h2.sec{font-family:var(--display);font-weight:600;font-size:26px;
+    letter-spacing:-.008em;margin:0 0 4px;color:var(--ink);
+    display:flex;align-items:baseline;gap:14px}
+  h2.sec .n{font-family:var(--mono);font-size:15px;font-weight:500;
+    color:var(--gold);letter-spacing:0}
+  h3.sub{font-family:var(--display);font-weight:600;font-size:19px;
+    margin:30px 0 6px;color:var(--ink)}
+  h4.subsub{font-family:var(--mono);font-size:12.5px;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--intent);margin:22px 0 4px;font-weight:600}
+  p{margin:0 0 15px}
+  p.lead{font-size:18px;line-height:1.6;color:var(--ink-soft)}
+  a{color:var(--link);text-decoration:none;border-bottom:1px solid rgba(28,74,99,.28)}
+  a:hover{border-bottom-color:var(--link)}
+  em{font-style:italic}
+  strong{font-weight:600;color:var(--ink)}
+  code{font-family:var(--mono);font-size:.86em;background:var(--paper-edge);
+    padding:1px 5px;border-radius:2px;color:var(--exec)}
+
+  .drop::first-letter{font-family:var(--display);font-weight:600;
+    font-size:3.1em;line-height:.82;float:left;margin:6px 10px 0 0;color:var(--intent)}
+
+  /* ── the SIGNATURE: the two-track collaboration ledger ── */
+  .ledger{margin:24px 0;border:1px solid var(--rule);border-radius:3px;overflow:hidden}
+  .ledger-head{display:grid;grid-template-columns:1fr 1fr;
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;
+    text-transform:uppercase}
+  .ledger-head .h-int{background:var(--intent);color:#fff;padding:8px 16px}
+  .ledger-head .h-exe{background:var(--exec);color:#fff;padding:8px 16px}
+  .ledger-row{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--hair)}
+  .ledger-row .cell{padding:13px 16px;font-size:14px;line-height:1.5}
+  .ledger-row .intent{background:var(--intent-bg);color:#3d2018;
+    border-right:1px solid var(--rule)}
+  .ledger-row .exec{background:var(--exec-bg);color:#122d3c;font-family:var(--mono);
+    font-size:12.5px;line-height:1.6}
+  .ledger-row .intent b{color:var(--intent)}
+  .ledger-row .exec b{color:var(--exec)}
+  .ledger-cap{font-family:var(--mono);font-size:11px;color:var(--faint);
+    margin-top:8px;letter-spacing:.03em}
+  @media(max-width:640px){
+    .ledger-head,.ledger-row{grid-template-columns:1fr}
+    .ledger-row .intent{border-right:0;border-bottom:1px solid var(--rule)}
+  }
+
+  /* ── method cards (the named primitives) ──────────────── */
+  .primitive{margin:20px 0;padding:20px 22px;background:#fff;
+    border:1px solid var(--hair);border-radius:3px}
+  .primitive .pid{font-family:var(--mono);font-size:11px;letter-spacing:.14em;
+    color:var(--gold);text-transform:uppercase;margin-bottom:6px}
+  .primitive h3{font-family:var(--display);font-weight:600;font-size:19px;
+    margin:0 0 8px;color:var(--ink)}
+  .primitive p{margin:0 0 10px;font-size:15px}
+  .primitive p:last-child{margin-bottom:0}
+  .primitive .novel{display:inline-block;font-family:var(--mono);font-size:10px;
+    letter-spacing:.1em;text-transform:uppercase;color:var(--intent);
+    border:1px solid var(--intent);border-radius:999px;padding:2px 9px;margin-left:8px;
+    vertical-align:middle}
+
+  /* ── figures & data ───────────────────────────────────── */
+  figure{margin:26px 0}
+  figure svg{display:block;width:100%;height:auto}
+  figcaption{font-family:var(--mono);font-size:11.5px;color:var(--faint);
+    margin-top:10px;line-height:1.55}
+  figcaption b{color:var(--ink-soft)}
+
+  table.data{width:100%;border-collapse:collapse;margin:22px 0;font-size:14px}
+  table.data caption{font-family:var(--mono);font-size:11px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--faint);text-align:left;margin-bottom:10px}
+  table.data th{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--ink-soft);text-align:left;
+    padding:9px 12px;border-bottom:1.5px solid var(--ink)}
+  table.data th.num,table.data td.num{text-align:right;font-family:var(--mono)}
+  table.data td{padding:9px 12px;border-bottom:1px solid var(--hair);vertical-align:top}
+  table.data tr:last-child td{border-bottom:1.5px solid var(--ink)}
+  table.data .total td{font-weight:600;background:var(--paper-edge)}
+
+  .callout{margin:22px 0;padding:16px 20px;border-left:3px solid var(--exec);
+    background:var(--exec-bg);font-size:15px}
+  .callout .lbl{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--exec);font-weight:600;margin-bottom:6px}
+
+  ul.clean,ol.clean{margin:14px 0;padding-left:0;list-style:none}
+  ul.clean li,ol.clean li{position:relative;padding-left:28px;margin-bottom:10px;font-size:15px}
+  ul.clean li::before{content:"—";position:absolute;left:0;color:var(--gold);font-family:var(--mono)}
+  ol.clean{counter-reset:it}
+  ol.clean li{counter-increment:it}
+  ol.clean li::before{content:counter(it);position:absolute;left:0;
+    font-family:var(--mono);font-size:12px;color:var(--gold);font-weight:600;top:2px}
+
+  .eq{font-family:var(--mono);font-size:13.5px;background:var(--paper-edge);
+    padding:12px 16px;border-radius:2px;margin:16px 0;overflow-x:auto;
+    color:var(--ink);border-left:2px solid var(--rule)}
+
+  /* ── references ───────────────────────────────────────── */
+  .refs{padding:38px 0 20px;border-top:2px solid var(--ink)}
+  .refs ol{padding-left:0;list-style:none;counter-reset:ref}
+  .refs li{counter-increment:ref;position:relative;padding-left:34px;
+    margin-bottom:12px;font-size:13.5px;line-height:1.5;color:var(--ink-soft)}
+  .refs li::before{content:"["counter(ref)"]";position:absolute;left:0;
+    font-family:var(--mono);font-size:12px;color:var(--faint)}
+  .refs .cite-t{color:var(--ink);font-style:italic}
+
+  /* ── footer / colophon ────────────────────────────────── */
+  footer.colophon{padding:34px 0 70px;font-family:var(--mono);font-size:11.5px;
+    color:var(--faint);line-height:1.7}
+  footer.colophon .cw{color:var(--ink-soft)}
+  footer.colophon a{color:var(--ink-soft)}
+
+  sup.fn{font-family:var(--mono);font-size:.7em;color:var(--exec);
+    vertical-align:super;line-height:0}
+
+  hr.thin{border:0;border-top:1px solid var(--hair);margin:30px 0}
+
+  @media print{
+    body{background:#fff;font-size:11pt}
+    .ledger-row .exec,.ledger-row .intent{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    section{padding:20px 0}
+    a{border:0}
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+<header class="masthead">
+  <div class="eyebrow">Preprint · Software Engineering Methodology · 2026</div>
+  <h1 class="title">Verification-Gated Human–AI Co-Development
+    <span class="sub">A reproducible methodology for high-assurance software, with a cost–benefit analysis of a 74-file, six-language engine built in hours</span>
+  </h1>
+  <div class="byline">
+    <span class="name">Abhishek Choudhary</span><br>
+    <span class="affil">Independent Researcher · Project ILM / AyeAI Consulting · Hyderabad, India</span><br>
+    <span class="affil">Former Senior Architect (IBM Power Hypervisor; founding architect, PowerAI / Watson ML Accelerator) · Platform Architect (HP SDN)</span>
+  </div>
+  <div class="meta-row">
+    <span class="tag">cs.SE</span>
+    <span class="tag">Human–AI Collaboration</span>
+    <span class="tag">Empirical Software Engineering</span>
+    <span class="tag">Case Study</span>
+    <span class="tag">Cost Modeling</span>
+  </div>
+</header>
+
+<div class="abstract">
+  <h2>Abstract</h2>
+  <p>Large language models can generate code, yet senior practitioners remain
+  rightly skeptical that AI assistance produces <em>trustworthy</em> systems at
+  scale: generation is fast, but verification, architectural coherence, and
+  provenance are where real engineering cost accrues. We report a methodology —
+  <strong>Verification-Gated Co-Development (VGC)</strong> — in which a single
+  senior architect directs an AI executor through a disciplined loop whose
+  defining property is that <em>no generated artifact is accepted until an
+  independent, machine-checkable oracle confirms it.</em> We formalize six
+  reusable collaboration primitives that emerged in practice, including a
+  cross-representation <em>parity oracle</em> that pins a hand-written C
+  implementation byte-for-byte against a reference JavaScript implementation
+  (6,590 automated checks), <em>exact-anchor patching</em> that makes AI edits
+  auditable and reversible, and <em>guarded-irreversibility</em> for operations
+  with real-world side effects.</p>
+  <p>As a case study we build CHAKRA, an offline, dependency-free astronomical
+  and calendrical engine: 74 files and ~8,150 lines across a JavaScript core,
+  a parity-verified C99 twin, five additional language bindings, five
+  interactive web instruments, a 120-assertion test suite, and a reproducible
+  DOI-minting pipeline. The system was delivered across seven working sessions
+  spanning days of elapsed time but a small fraction of the human effort a
+  conventional team would require. We estimate the direct AI inference cost at
+  <strong>US$143–412 (central US$251)</strong> and the total collaboration cost,
+  including human time, at <strong>≈US$6,000</strong>, against a conventional
+  baseline the author independently estimated at <strong>4–6 person-years
+  (≈US$1.2–1.8M loaded)</strong> — a cost reduction of <strong>~99.5%</strong>
+  and an effort compression of <strong>~200–300×</strong>. We present the
+  methodology, the case study, the cost model with sensitivity bounds, and an
+  honest treatment of threats to validity, and argue that the transferable
+  contribution is not the artifact but the <em>gate</em>.</p>
+  <p class="kw"><b>Keywords</b> — human–AI collaboration; verification-gated
+  generation; parity oracle; software cost estimation; agentic development;
+  provenance; reproducibility; empirical software engineering</p>
+</div>
+
+<section id="intro">
+  <h2 class="sec"><span class="n">1</span> Introduction</h2>
+  <p class="lead drop">The question is no longer whether an AI system can write
+  code. It is whether a small human–AI dyad can produce software that a senior
+  reviewer would <em>stake their name on</em> — coherent in architecture,
+  verified in behavior, honest about its limits, and traceable in provenance —
+  and whether doing so changes the economics of software enough to matter.</p>
+
+  <p>Contemporary discourse conflates two very different claims. The first, now
+  uncontroversial, is that language models raise the <em>throughput</em> of code
+  production. The second, which this paper addresses, is whether that throughput
+  can be converted into <em>assurance</em> without surrendering the properties
+  senior engineers care about: that the system does what it claims, that a change
+  in one place does not silently break another, that a second implementation
+  agrees with the first, and that no irreversible action is taken on unverified
+  inputs. Throughput without assurance is a liability, not a productivity gain;
+  the interesting engineering question is the conversion between them.</p>
+
+  <p>We report a methodology developed and stress-tested over seven working
+  sessions in which one author — a systems architect with two decades of
+  hypervisor, ML-accelerator, and SDN experience — directed an AI executor
+  (Anthropic's Claude, operating with code-execution and tool-use) to build a
+  non-trivial system end to end. The methodology's organizing principle is a
+  <em>gate</em>: a machine-checkable oracle that every generated artifact must
+  pass before it is accepted into the working tree. The gate is what converts
+  fast generation into trustworthy delivery, and it is the paper's central
+  transferable claim.</p>
+
+  <h3 class="sub">1.1 Contributions</h3>
+  <ol class="clean">
+    <li><strong>A named methodology (VGC)</strong> and six reusable collaboration
+    primitives (§3), each stated precisely enough to be adopted by other
+    practitioner–AI dyads and each grounded in an artifact from the case study.</li>
+    <li><strong>A cross-representation parity oracle</strong> (§3.1) that we
+    argue is the load-bearing innovation: an independent second implementation,
+    in a different language with different failure modes, checked byte-for-byte
+    against the reference — turning "the AI probably got it right" into "6,590
+    assertions say it did."</li>
+    <li><strong>A worked case study</strong> (§4) with full quantitative
+    characterization: 74 files, six language targets, a 120-assertion suite, and
+    a reproducible research-artifact (DOI) pipeline.</li>
+    <li><strong>A transparent cost model and cost–benefit analysis</strong> (§5)
+    with sensitivity bounds, comparing measured collaboration cost against an
+    independently-derived conventional baseline.</li>
+    <li><strong>An honest threats-to-validity analysis</strong> (§6), including
+    the ways a single case study and a self-reported baseline can mislead, and
+    the conditions under which the method does <em>not</em> apply.</li>
+  </ol>
+
+  <div class="callout">
+    <div class="lbl">Framing for the skeptical reader</div>
+    This paper does not claim AI "replaces" senior engineers. It claims the
+    opposite: the method's leverage comes <em>from</em> senior judgment —
+    knowing what oracle would falsify a mistake, and refusing to proceed without
+    it. The AI supplies breadth and speed; the human supplies the gate. Remove
+    the gate and the approach reduces to the very "confident, unverified
+    generation" the paper argues against.
+  </div>
+</section>
+
+<section id="related">
+  <h2 class="sec"><span class="n">2</span> Background &amp; Related Work</h2>
+  <p>Our methodology sits at the intersection of four literatures. From
+  <em>pair programming</em> and its empirical study <sup class="fn">[1]</sup> we
+  inherit the driver/navigator division of labor, but invert the usual seniority
+  assumption: here the human is always the navigator and the AI is a driver of
+  effectively unlimited stamina but no persistent memory or accountability. From
+  <em>test-driven and property-based development</em> <sup class="fn">[2,3]</sup>
+  we inherit the discipline of writing the check before trusting the code, and
+  extend it to a cross-implementation setting. From <em>N-version programming</em>
+  <sup class="fn">[4]</sup> we borrow the intuition that independent
+  implementations fail differently — but we use the second version not for
+  runtime fault tolerance but as a <em>development-time oracle</em>. And from the
+  emerging study of <em>LLM-based software engineering</em> and agentic coding
+  <sup class="fn">[5,6,7]</sup> we take the observation that unaided LLM
+  generation exhibits plausible-but-wrong failure modes that conventional review
+  catches poorly, motivating mechanical gates.</p>
+
+  <p>What is, to our knowledge, not yet described is the specific combination
+  that makes senior-grade assurance tractable in an AI dyad: a
+  <em>cross-representation parity oracle</em> as the primary acceptance test, an
+  <em>exact-anchor patch discipline</em> that keeps AI edits auditable, and a
+  <em>guarded-irreversibility</em> protocol for side-effecting operations. We
+  position VGC not as a replacement for these prior methods but as their
+  synthesis under the constraint of a memoryless, non-accountable, high-throughput
+  collaborator.</p>
+</section>
+
+<section id="method">
+  <h2 class="sec"><span class="n">3</span> The VGC Methodology</h2>
+  <p class="lead">Verification-Gated Co-Development is a loop, not a pipeline.
+  Each turn of the loop moves an artifact from <em>intent</em> (a human-stated
+  goal) to <em>execution</em> (AI-generated change) to <em>gate</em> (mechanical
+  verification) and either accepts the change or returns it, with the failing
+  oracle output, for repair. The human never writes the change and the AI never
+  approves it; acceptance is the oracle's alone.</p>
+
+  <p>The loop's cadence is captured in the collaboration ledger below — the
+  paper's recurring device. The left track is what the human specified; the
+  right track is what the AI did and, critically, <em>what oracle confirmed
+  it.</em> Every accepted change in the case study has such a pair.</p>
+
+  <div class="ledger">
+    <div class="ledger-head">
+      <div class="h-int">Human intent (the navigator)</div>
+      <div class="h-exe">AI execution + gate (the driver)</div>
+    </div>
+    <div class="ledger-row">
+      <div class="cell intent">"The C port must be <b>provably</b> the same as the JS engine — I don't trust a second implementation I can't check."</div>
+      <div class="cell exec">Generated <b>vectors.h</b> from the JS reference; wrote <b>test_chakra.c</b> to diff every field. Gate: <b>parity: 6590 passed, 0 failed</b>. Accepted only on green.</div>
+    </div>
+    <div class="ledger-row">
+      <div class="cell intent">"Fix the Dīpāvalī date. And don't break the month rule while doing it."</div>
+      <div class="cell exec">Located the exact <code>\u</code>-escaped source line; patched the pradoṣa rule; re-ran the suite. Gate: <b>node suite green + festival strings byte-identical 2026–27</b>.</div>
+    </div>
+    <div class="ledger-row">
+      <div class="cell intent">"Start minting the DOI." (an irreversible, public action)</div>
+      <div class="cell exec">Refused to mint from the assistant environment; delivered a <b>dry-run-by-default</b> script requiring an explicit <code>--live</code> flag and a typed confirmation on the human's own machine.</div>
+    </div>
+  </div>
+  <p class="ledger-cap">Figure 1 · The collaboration ledger. Every accepted
+  change pairs a human intent with an AI execution <em>and its gate</em>. The
+  discipline is that the right column is never empty of an oracle.</p>
+
+  <h3 class="sub">3.1 The six collaboration primitives</h3>
+  <p>The following primitives emerged repeatedly and, we argue, transfer beyond
+  this project. Each is stated as a reusable pattern with the problem it solves.</p>
+
+  <div class="primitive">
+    <div class="pid">Primitive P1</div>
+    <h3>Cross-Representation Parity Oracle <span class="novel">Core innovation</span></h3>
+    <p>When correctness is hard to specify but easy to <em>compare</em>, build a
+    second implementation in a language with different failure modes and check it
+    field-by-field against the reference. Here a hand-written C99 engine is pinned
+    to a JavaScript reference by machine-generated vectors: 6,590 assertions,
+    including UTF-8 festival strings checked to the byte. The oracle is decisive
+    precisely because a floating-point or index error in the port would have to
+    coincidentally match the same error in the reference — vanishingly unlikely.</p>
+    <p>This inverts N-version programming: the redundant version is not for
+    runtime resilience but is the <em>development-time acceptance test</em> that
+    lets a human trust AI-generated numerics without re-deriving them.</p>
+  </div>
+
+  <div class="primitive">
+    <div class="pid">Primitive P2</div>
+    <h3>Exact-Anchor Patching <span class="novel">Auditability</span></h3>
+    <p>AI edits are applied only via changes that match an exact, unique byte
+    string in the target file (a heredoc-delivered patch keyed to a verbatim
+    anchor), never by regeneration of whole files. If the anchor is not found
+    exactly once, the patch aborts rather than guessing. This makes every AI edit
+    reviewable as a diff, reversible, and immune to the silent drift that
+    whole-file regeneration invites — and it surfaces encoding subtleties (e.g.
+    <code>\u</code>-escaped source) as hard failures instead of corrupted output.</p>
+  </div>
+
+  <div class="primitive">
+    <div class="pid">Primitive P3</div>
+    <h3>Guarded Irreversibility <span class="novel">Safety</span></h3>
+    <p>Operations with real-world side effects — publishing a DOI, pushing to a
+    shared branch, deleting records — default to a dry-run that validates
+    everything and touches nothing, and require an explicit escalation flag plus
+    a typed human confirmation to execute for real. The AI is structurally
+    prevented from taking the irreversible step autonomously. This primitive was
+    motivated by a genuine prior incident (an erroneously minted duplicate record)
+    and encodes the lesson as a mechanical constraint rather than a hope.</p>
+  </div>
+
+  <div class="primitive">
+    <div class="pid">Primitive P4</div>
+    <h3>Source-of-Truth Reconciliation <span class="novel">Coherence</span></h3>
+    <p>When human and AI states can diverge (the human edits or releases out of
+    band), the canonical store is named once and the AI <em>re-adopts it and
+    diffs to zero</em> before any new work — verifying agreement rather than
+    assuming it. In the case study, each session began by pulling the published
+    repository and confirming byte-identity with the working tree, catching drift
+    before it compounded.</p>
+  </div>
+
+  <div class="primitive">
+    <div class="pid">Primitive P5</div>
+    <h3>Read-Before-Write Grounding <span class="novel">Anti-hallucination</span></h3>
+    <p>Before modifying or "rebuilding" any component, the AI is required to read
+    the actual existing implementation and verify what is already present, rather
+    than reconstruct from assumption. This directly counters the dominant LLM
+    failure mode — confidently reinventing something that already exists, subtly
+    differently. Several times the correct action was to discover a capability was
+    already implemented and passing, and to <em>stop</em>.</p>
+  </div>
+
+  <div class="primitive">
+    <div class="pid">Primitive P6</div>
+    <h3>Honest Deferral to a Tracked Backlog <span class="novel">Scope integrity</span></h3>
+    <p>Work that cannot be completed and verified within the current effort is not
+    faked, stubbed, or silently dropped; it is written as a precise, self-contained
+    issue in a tracked backlog (49 such issues here) that a future human or AI can
+    execute. This preserves the honesty of the "done" claim — everything reported
+    as complete is verified; everything unverified is visibly deferred.</p>
+  </div>
+</section>
+
+<section id="casestudy">
+  <h2 class="sec"><span class="n">4</span> Case Study: CHAKRA</h2>
+  <p class="lead">To exercise the methodology on something a senior reviewer
+  would recognize as non-trivial, we built CHAKRA — an offline, dependency-free
+  astronomical and calendrical observatory that computes ten calendar traditions,
+  planetary positions, the Hindu pañcāṅga, eclipses, and classical jyotiṣa
+  structures from live orbital mechanics rather than lookup tables.</p>
+
+  <p>CHAKRA is deliberately in a domain where correctness is <em>checkable but
+  unforgiving</em>: an astronomical routine is either right to arc-minutes or it
+  is wrong, and calendar arithmetic across Gregorian, Hijrī (with distinct
+  Sunni/Shia tabular sets), Hebrew, Solar Hijrī, Nanakshahi, and others admits no
+  hand-waving. This is precisely the setting where the parity oracle (P1) earns
+  its keep.</p>
+
+  <table class="data">
+    <caption>Table 1 · Delivered artifact, quantitative characterization</caption>
+    <thead>
+      <tr><th>Component</th><th>Detail</th><th class="num">Lines</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>JavaScript reference core</td><td>ephemeris, calendars, pañcāṅga, eclipses, jyotiṣa</td><td class="num">2,151</td></tr>
+      <tr><td>C99 parity twin</td><td>byte-verified against the reference (6,590 checks)</td><td class="num">1,248</td></tr>
+      <tr><td>Web instruments (×5)</td><td>landing, observatory, mathematics, tour, test console</td><td class="num">2,775</td></tr>
+      <tr><td>Language bindings (×6)</td><td>Python, Rust, Go, C#, Node, GW-BASIC/QB64</td><td class="num">1,292</td></tr>
+      <tr><td>Test suite</td><td>120 assertions, auto-discovered</td><td class="num">311</td></tr>
+      <tr><td>Documentation &amp; governance</td><td>architecture, contracts, 49-issue backlog</td><td class="num">773</td></tr>
+      <tr class="total"><td>Total substantive</td><td>74 files</td><td class="num">8,150</td></tr>
+    </tbody>
+  </table>
+
+  <p>Two verification surfaces ran continuously as gates: a <strong>120-assertion
+  JavaScript suite</strong> and the <strong>6,590-check C-parity harness</strong>,
+  the latter regenerated from the reference on every change so the two
+  implementations could never silently diverge. A representative gate signature,
+  reproduced verbatim from a build session:</p>
+
+  <div class="eq">node test/run.js  →  ✓ ALL SUITES PASSED  (120 assertions)
+make -C lib test  →  parity: 6590 passed, 0 failed</div>
+
+  <p>The DOI pipeline (P3) illustrates guarded irreversibility concretely. The
+  minting script defaults to a Zenodo sandbox dry-run that builds the artifact,
+  validates metadata against the publisher's schema, and records a SHA-256 — with
+  zero network calls — and mints a permanent public identifier only under an
+  explicit <code>--live</code> flag with a typed confirmation. When the human
+  attempted a live mint, a real schema-validation error surfaced
+  (<code>embargo_date</code> required by a conditional the metadata had not
+  satisfied); the gate caught it <em>before</em> anything was published, and the
+  fix was verified against the actual shipped schema rather than assumed.</p>
+
+  <figure>
+    <svg viewBox="0 0 820 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The VGC loop: intent, execution, gate, and either accept or return with oracle output.">
+      <defs>
+        <marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+          <path d="M0,0 L7,3 L0,6 Z" fill="#41485a"/>
+        </marker>
+        <marker id="arR" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+          <path d="M0,0 L7,3 L0,6 Z" fill="#7a3b2e"/>
+        </marker>
+      </defs>
+      <!-- Intent -->
+      <rect x="24" y="120" width="150" height="60" rx="4" fill="#f6ede9" stroke="#7a3b2e"/>
+      <text x="99" y="146" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="12" font-weight="600" fill="#7a3b2e">HUMAN INTENT</text>
+      <text x="99" y="164" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="10" fill="#3d2018">state a goal</text>
+      <!-- Execution -->
+      <rect x="235" y="120" width="150" height="60" rx="4" fill="#e9f0f4" stroke="#1c4a63"/>
+      <text x="310" y="146" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="12" font-weight="600" fill="#1c4a63">AI EXECUTION</text>
+      <text x="310" y="164" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="10" fill="#122d3c">generate change</text>
+      <!-- Gate -->
+      <path d="M535,150 L575,110 L615,150 L575,190 Z" fill="#faf8f3" stroke="#9a7420" stroke-width="1.5"/>
+      <text x="575" y="146" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" font-weight="600" fill="#9a7420">GATE</text>
+      <text x="575" y="160" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="9" fill="#6b5017">oracle?</text>
+      <!-- Accept -->
+      <rect x="670" y="120" width="126" height="60" rx="4" fill="#1a1f2b"/>
+      <text x="733" y="146" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="12" font-weight="600" fill="#fff">ACCEPT</text>
+      <text x="733" y="164" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="10" fill="#c8c0b0">into tree</text>
+      <!-- arrows forward -->
+      <line x1="174" y1="150" x2="231" y2="150" stroke="#41485a" stroke-width="1.5" marker-end="url(#ar)"/>
+      <line x1="385" y1="150" x2="531" y2="150" stroke="#41485a" stroke-width="1.5" marker-end="url(#ar)"/>
+      <line x1="617" y1="150" x2="666" y2="150" stroke="#41485a" stroke-width="1.5" marker-end="url(#ar)"/>
+      <text x="641" y="140" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="9" fill="#1c4a63">pass</text>
+      <!-- return loop (fail) -->
+      <path d="M575,192 L575,250 L310,250 L310,182" fill="none" stroke="#7a3b2e" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arR)"/>
+      <text x="440" y="266" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="10" fill="#7a3b2e">fail → return with the oracle's output, repair, retry</text>
+      <!-- title -->
+      <text x="24" y="40" font-family="Newsreader,serif" font-size="18" font-weight="600" fill="#1a1f2b">The gate is the invariant</text>
+      <text x="24" y="62" font-family="Spectral,serif" font-size="13" fill="#41485a">Acceptance belongs to the oracle, not to either party.</text>
+    </svg>
+    <figcaption><b>Figure 2 · The VGC loop.</b> The human states intent; the AI
+    executes; a machine-checkable oracle decides. Failure returns the artifact
+    <em>with the failing output</em> for repair. The loop's fixed point is a
+    change that no oracle can falsify.</figcaption>
+  </figure>
+</section>
+
+<section id="cost">
+  <h2 class="sec"><span class="n">5</span> Cost Model &amp; Cost–Benefit Analysis</h2>
+  <p class="lead">We now quantify what the collaboration cost and what it
+  displaced. We state every assumption; readers who prefer different assumptions
+  can recompute from the sensitivity table.</p>
+
+  <h3 class="sub">5.1 Direct inference (API) cost</h3>
+  <p>The work spanned seven agentic sessions. In tool-using agentic workflows
+  each assistant turn re-ingests the running context (system instructions, tool
+  definitions, and accumulated history), so token consumption is dominated by
+  <em>input</em> re-reads rather than output. We estimate per-turn input at
+  ≈70,000 tokens (a stable base context plus growing, partly-compacted history)
+  and per-turn output at ≈3,500 tokens, over an estimated 385 tool-turns
+  (7 sessions × ≈55 turns). This yields ≈27.0M input and ≈1.35M output tokens,
+  ≈28.3M total.</p>
+
+  <p>We price against a current frontier (Opus-class) public list — US$15 / M
+  input, US$75 / M output — and model prompt caching, which is decisive because
+  the base context repeats every turn and reads at ≈US$1.50 / M when cached.
+  With a 70% cache-hit assumption the central estimate is:</p>
+
+  <table class="data">
+    <caption>Table 2 · Direct inference cost, central estimate</caption>
+    <thead><tr><th>Component</th><th class="num">Tokens</th><th class="num">Rate /M</th><th class="num">Cost</th></tr></thead>
+    <tbody>
+      <tr><td>Input — cached reads (70%)</td><td class="num">18.9M</td><td class="num">$1.50</td><td class="num">$28.30</td></tr>
+      <tr><td>Input — uncached (30%)</td><td class="num">8.1M</td><td class="num">$15.00</td><td class="num">$121.28</td></tr>
+      <tr><td>Output</td><td class="num">1.35M</td><td class="num">$75.00</td><td class="num">$101.06</td></tr>
+      <tr class="total"><td>Total direct inference</td><td class="num">28.3M</td><td class="num">—</td><td class="num">$250.63</td></tr>
+    </tbody>
+  </table>
+
+  <p>Because the two largest uncertainties are the turn count and the cache-hit
+  rate, we report a sensitivity band rather than a point estimate:</p>
+
+  <table class="data">
+    <caption>Table 3 · API cost sensitivity (7 sessions; USD)</caption>
+    <thead><tr><th>Turns / session</th><th class="num">cache 50%</th><th class="num">cache 70%</th><th class="num">cache 85%</th></tr></thead>
+    <tbody>
+      <tr><td>40 (conservative)</td><td class="num">$235</td><td class="num">$182</td><td class="num">$143</td></tr>
+      <tr><td>55 (central)</td><td class="num">$323</td><td class="num">$251</td><td class="num">$196</td></tr>
+      <tr><td>70 (heavy)</td><td class="num">$412</td><td class="num">$319</td><td class="num">$250</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <div class="lbl">Direct inference cost — result</div>
+    <strong>US$143–412, central US$251.</strong> Even the pessimistic upper
+    bound is a rounding error against the human baseline below. Note this is an
+    <em>estimate</em>, not a metered figure (see §6): the sessions were compacted,
+    so true token flow is bounded but not exactly known.
+  </div>
+
+  <h3 class="sub">5.2 The conventional baseline</h3>
+  <p>The author, a senior architect, independently estimated the conventional
+  cost of an equivalent deliverable — a verified multi-language astronomical
+  engine with six bindings, five instruments, a parity-checked C core, a test
+  suite, and a reproducible release pipeline — at <strong>4–6 person-years with a
+  high-cost team.</strong> At a fully-loaded senior rate of US$300,000 / person-year
+  (salary, benefits, overhead, for staff/principal-level specialists including the
+  domain astronomy and the systems work), this is <strong>US$1.2M–1.8M</strong>.</p>
+
+  <p>This estimate is a counterfactual and is the single most contestable input;
+  §6 treats it as such. We note only that the deliverable's breadth — correctness
+  in an unforgiving numeric domain, across six language ecosystems, with
+  cross-implementation parity — makes a multi-person-year figure unsurprising to
+  practitioners who have shipped comparable systems.</p>
+
+  <h3 class="sub">5.3 Cost–benefit analysis</h3>
+  <p>Human time actually expended in the collaboration was small — the human
+  directed, reviewed, ran terminal commands, and tested, but did not write the
+  implementation — and was further bounded by severe platform rate-limiting
+  during the sessions (on the order of minutes of model access per multi-hour
+  window). We estimate ≈40 active human hours at the same loaded rate
+  (≈US$144/hour), i.e. ≈US$5,800, giving a total collaboration cost of
+  ≈US$6,000 including inference.</p>
+
+  <table class="data">
+    <caption>Table 4 · Cost–benefit summary</caption>
+    <thead><tr><th>Quantity</th><th class="num">Low</th><th class="num">High</th></tr></thead>
+    <tbody>
+      <tr><td>Conventional baseline (4–6 PY @ $300k)</td><td class="num">$1,200,000</td><td class="num">$1,800,000</td></tr>
+      <tr><td>Collaboration cost (inference + human time)</td><td class="num">$5,950</td><td class="num">$6,180</td></tr>
+      <tr><td>Net saving</td><td class="num">$1,194,000</td><td class="num">$1,794,000</td></tr>
+      <tr class="total"><td>Cost reduction</td><td class="num">99.50%</td><td class="num">99.66%</td></tr>
+      <tr class="total"><td>Cost ratio (baseline ÷ collaboration)</td><td class="num">≈199×</td><td class="num">≈290×</td></tr>
+    </tbody>
+  </table>
+
+  <figure>
+    <svg viewBox="0 0 820 210" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Log-scale comparison: collaboration cost around six thousand dollars versus baseline of 1.2 to 1.8 million dollars.">
+      <text x="24" y="30" font-family="Newsreader,serif" font-size="17" font-weight="600" fill="#1a1f2b">Two orders of magnitude, then some</text>
+      <!-- axis baseline -->
+      <line x1="180" y1="70" x2="720" y2="70" stroke="#d9d3c6"/>
+      <line x1="180" y1="120" x2="720" y2="120" stroke="#d9d3c6"/>
+      <!-- collaboration bar (tiny) -->
+      <text x="170" y="74" text-anchor="end" font-family="IBM Plex Mono,monospace" font-size="11" fill="#1c4a63">collaboration</text>
+      <rect x="180" y="62" width="3.5" height="16" fill="#1c4a63"/>
+      <text x="192" y="74" font-family="IBM Plex Mono,monospace" font-size="11" fill="#41485a">≈ $6,000</text>
+      <!-- baseline bar (huge) -->
+      <text x="170" y="124" text-anchor="end" font-family="IBM Plex Mono,monospace" font-size="11" fill="#7a3b2e">baseline (4–6 PY)</text>
+      <rect x="180" y="112" width="540" height="16" fill="#7a3b2e" opacity="0.85"/>
+      <rect x="180" y="112" width="360" height="16" fill="#7a3b2e"/>
+      <text x="548" y="124" font-family="IBM Plex Mono,monospace" font-size="11" fill="#41485a">$1.2M – $1.8M</text>
+      <!-- ratio annotation -->
+      <text x="180" y="168" font-family="Spectral,serif" font-size="13" fill="#41485a">The bars are drawn to linear scale. The collaboration bar is 3.5 px wide;</text>
+      <text x="180" y="186" font-family="Spectral,serif" font-size="13" fill="#41485a">the baseline is ~200–290× longer. At log scale the gap is ≈2.3 decades.</text>
+    </svg>
+    <figcaption><b>Figure 3 · Cost comparison, linear scale.</b> Effort
+    compression is of comparable magnitude: a 4–6 person-year (≈8,300–12,500
+    person-hour) baseline against ≈40 human hours is a <b>≈200–300× reduction in
+    human effort</b>; cost per substantive line falls from ≈US$150–220 to
+    ≈US$0.74.</figcaption>
+  </figure>
+
+  <p>Two framings guard against the charge of a cherry-picked baseline. First,
+  even taking the <em>pessimistic</em> upper-bound inference cost (US$412) and the
+  <em>low</em> baseline (US$1.2M), the collaboration is still ≈194× cheaper.
+  Second, a purely commercial replication estimate — an optimistic two
+  person-years at a blended US$150/hour contractor rate, US$624,000 — remains
+  more than three orders of magnitude above the ≈US$251 of inference that
+  actually produced the artifact.</p>
+</section>
+
+<section id="threats">
+  <h2 class="sec"><span class="n">6</span> Threats to Validity</h2>
+  <p class="lead">A result this large invites — and deserves — scrutiny. We
+  enumerate the threats candidly; several materially qualify the numbers.</p>
+
+  <h4 class="subsub">Construct &amp; internal validity</h4>
+  <ul class="clean">
+    <li><strong>Single case study (n = 1).</strong> One project, one domain, one
+    dyad. The methodology may generalize; the specific 200–300× figure should not
+    be read as a population parameter. It is an existence proof that such
+    compression is <em>achievable</em>, not a claim that it is typical.</li>
+    <li><strong>The baseline is self-reported.</strong> The 4–6 person-year figure
+    is the author's expert estimate, not a controlled A/B against a real team
+    building the same system. Expert estimates are known to vary widely. We report
+    it transparently and invite independent re-estimation; the qualitative claim
+    (multiple orders of magnitude) is robust to substantial error in this input.</li>
+    <li><strong>Inference cost is estimated, not metered.</strong> Sessions were
+    compacted, so exact token counts are unavailable; we bound rather than measure.
+    The sensitivity band (Table 3) is our attempt at honesty about this.</li>
+    <li><strong>Author as both practitioner and evaluator.</strong> The person who
+    ran the method also wrote the analysis — a conflict we cannot fully remove in a
+    self-report. The artifacts (repository, test outputs, transcripts) are
+    available for independent audit precisely to mitigate this.</li>
+  </ul>
+
+  <h4 class="subsub">External validity — where the method does <em>not</em> apply</h4>
+  <ul class="clean">
+    <li><strong>The leverage is domain-shaped.</strong> VGC excels where
+    correctness is <em>checkable</em> — numeric, spec-conformant, parity-amenable
+    domains with cheap oracles. In domains where the oracle is as hard to build as
+    the system (open-ended product design, ill-specified requirements, tacit UX
+    judgment), the gate degrades and the advantage shrinks.</li>
+    <li><strong>Senior judgment is the hidden input.</strong> The method's power
+    comes from a practitioner who knows <em>which</em> oracle would falsify a
+    mistake. Remove that judgment and VGC collapses into unverified generation. The
+    result is therefore not "AI builds systems cheaply" but "a senior architect
+    plus AI, under a verification gate, builds checkable systems cheaply."</li>
+    <li><strong>Novelty of the specific stack.</strong> An offline astronomical
+    engine has abundant reference mathematics; a domain with no reference to build
+    a parity oracle against would not admit P1 in this form.</li>
+  </ul>
+
+  <div class="callout">
+    <div class="lbl">The honest headline</div>
+    The transferable contribution is the <em>gate</em>, not the multiplier. We
+    are confident in "a verification-gated dyad can build high-assurance,
+    checkable software at a small fraction of conventional cost." We are
+    appropriately unconfident that any particular project will see 200×; that
+    number is one data point, generously bounded, openly qualified.
+  </div>
+</section>
+
+<section id="conclusion">
+  <h2 class="sec"><span class="n">7</span> Discussion, Venues &amp; Conclusion</h2>
+  <p>We have described Verification-Gated Co-Development — a methodology in which
+  a senior human directs an AI executor through a loop whose acceptance criterion
+  is always a machine-checkable oracle — and six reusable primitives that make it
+  work, chief among them a cross-representation parity oracle that converts
+  "the AI probably got it right" into thousands of passing assertions. A
+  full-scale case study delivered a 74-file, six-language, parity-verified engine
+  for an estimated ≈US$251 of inference and ≈40 human hours, against a
+  conventional baseline of 4–6 person-years — with the caveats of §6 held firmly
+  in view.</p>
+
+  <h3 class="sub">7.1 Suggested publication venues</h3>
+  <p>The paper spans software-engineering methodology, human–AI collaboration, and
+  empirical cost analysis; the natural venues, roughly in order of fit:</p>
+  <ul class="clean">
+    <li><strong>ICSE — Software Engineering in Practice (SEIP) track.</strong> The
+    premier venue for rigorously-reported industrial practice; the case-study-plus-
+    methodology shape and the practitioner framing fit SEIP directly.</li>
+    <li><strong>IEEE Transactions on Software Engineering (TSE).</strong> For an
+    extended, archival version with a deeper formalization of the primitives and,
+    ideally, a second case study to strengthen external validity.</li>
+    <li><strong>ACM CSCW / CHI.</strong> For the human–AI collaboration angle — the
+    navigator/driver inversion, the ledger as an interaction pattern, and the role
+    of the gate in calibrated trust — reframed toward the HCI community.</li>
+    <li><strong>Empirical Software Engineering (EMSE), Springer.</strong> A strong
+    fit for the cost model and CBA as an empirical contribution, with room for the
+    threats-to-validity treatment the journal expects.</li>
+    <li><strong>IEEE Software (magazine).</strong> For a shorter, practitioner-
+    facing distillation aimed squarely at the senior-architect readership.</li>
+    <li><strong>FSE / ESEC-FSE.</strong> An alternative top-tier SE venue if the
+    methodological novelty (the parity-oracle gate) is foregrounded over the case
+    study.</li>
+    <li><strong>Preprint: arXiv <code>cs.SE</code></strong> for immediate
+    dissemination and citation ahead of formal review.</li>
+  </ul>
+  <p>For any of these, the strongest revision would add a second, deliberately
+  different case study (ideally in a domain with a harder oracle) to convert the
+  existence proof into a defensible generalization, and — where possible —
+  metered token counts to replace the estimated inference cost.</p>
+
+  <h3 class="sub">7.2 Conclusion</h3>
+  <p>The economics of software may be shifting, but not for the reason the hype
+  suggests. It is not that AI writes code; it is that a disciplined human–AI
+  loop, gated on verification, can deliver <em>checkable</em> systems with an
+  assurance a senior reviewer will accept, at a cost that changes what a single
+  practitioner can attempt. The artifact will age; the gate is the idea worth
+  keeping.</p>
+</section>
+
+<div class="refs">
+  <h2 class="sec" style="border:0;padding:0;margin-bottom:18px"><span class="n">R</span> References</h2>
+  <ol>
+    <li><span class="cite-t">The costs and benefits of pair programming.</span> Cockburn, A. &amp; Williams, L. In <em>Extreme Programming Examined</em>, Addison-Wesley, 2000. (Empirical driver/navigator division of labor.)</li>
+    <li><span class="cite-t">Test-Driven Development: By Example.</span> Beck, K. Addison-Wesley, 2002. (Write the check before trusting the code.)</li>
+    <li><span class="cite-t">QuickCheck: a lightweight tool for random testing of Haskell programs.</span> Claessen, K. &amp; Hughes, J. <em>ICFP</em>, 2000. (Property-based testing; specifying behavior as checkable properties.)</li>
+    <li><span class="cite-t">An experiment in software reliability: the N-version programming approach.</span> Avižienis, A. &amp; Chen, L. IEEE Trans. Reliability, 1978/1985. (Independent implementations fail differently — here repurposed as a development-time oracle.)</li>
+    <li><span class="cite-t">Evaluating large language models trained on code.</span> Chen, M. et al. (Codex), 2021. (Capability and the plausible-but-wrong failure mode of unaided generation.)</li>
+    <li><span class="cite-t">SWE-bench: Can language models resolve real-world GitHub issues?</span> Jimenez, C. et al., 2023/2024. (Agentic software engineering; the gap between generation and verified resolution.)</li>
+    <li><span class="cite-t">Emerging practices in agentic and tool-using LLM software development.</span> (Representative of the 2024–2026 practitioner literature motivating mechanical acceptance gates.)</li>
+  </ol>
+</div>
+
+<footer class="colophon">
+  <div class="cw">Copyright © 2026 Abhishek Choudhary. All rights reserved.</div>
+  Released for scholarly and non-commercial use with attribution
+  (SPDX: CC-BY-NC-4.0). The methodology, analysis, figures, and text are the
+  author's own work, developed in collaboration with an AI system (Anthropic
+  Claude) operating under the verification-gated protocol described herein.<br><br>
+  Case-study artifact: the CHAKRA Temporal Cycle Observatory —
+  <a href="https://github.com/project-ilm/chakra">github.com/project-ilm/chakra</a>
+  (code GPL-3.0-or-later; documentation CC BY-SA 4.0). Cost figures are
+  transparent estimates with stated assumptions and sensitivity bounds, not
+  metered measurements; see §5–§6. Independent re-estimation and replication are
+  explicitly invited.<br><br>
+  <span style="color:#a8a294">Preprint · not yet peer-reviewed · prepared 2026 ·
+  typeset in Newsreader, Spectral &amp; IBM Plex Mono.</span>
+</footer>
+
+</div>
+</body>
+</html>
