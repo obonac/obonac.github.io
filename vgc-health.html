@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VGC-Health — A Verification-Gated Clinical Co-Development Manifold</title>
+<meta name="author" content="Abhishek Choudhary">
+<meta name="description" content="A research proposal to let clinicians and other health professionals contribute to a shared, versioned, falsifiable clinical knowledge manifold — without writing code — by extending Verification-Gated Human-AI Co-Development (VGC) into healthcare across mind, body and society; every care setting; and every specialty.">
+<meta property="og:title" content="VGC-Health — A Verification-Gated Clinical Co-Development Manifold">
+<meta property="og:description" content="How doctors and health professionals can contribute to a shared clinical knowledge manifold — without writing code — under a verification gate. With a hands-on VGC Prompt Studio.">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Spectral:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] }, options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] } };
+</script>
+<script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+<style>
+:root{
+  --navy:#0a0e27; --navy2:#0c1030;
+  --panel:#141a3a; --panel2:#0f1430;
+  --line:#28305a; --line2:#1e2547;
+  --ink:#e7ebf7; --soft:#aeb8d8; --faint:#828cb2;
+  --gold:#d4a843; --gold2:#e6bd5c; --peri:#b9c6ea;
+  --ox:#d1704a;
+  /* legacy names remapped so existing markup recolors automatically */
+  --paper:var(--navy); --rule:var(--line); --rule2:var(--line2);
+  --accent:var(--gold); --accent2:var(--ox);
+  --box:var(--panel); --boxline:var(--line);
+  --tldr:#121838; --tldrline:#2e3670; --tech:var(--panel2);
+  --maxw:780px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0; background:var(--navy); color:var(--ink); font-family:"Newsreader",Georgia,serif; font-size:19px; line-height:1.64; font-optical-sizing:auto; -webkit-font-smoothing:antialiased}
+.wrap{max-width:var(--maxw); margin:0 auto; padding:0 22px 6rem}
+header.top{max-width:var(--maxw); margin:0 auto; padding:3.2rem 22px 1rem}
+.eyebrow{font-family:"IBM Plex Mono",monospace; font-size:.7rem; letter-spacing:.14em; text-transform:uppercase; color:var(--gold); margin:0 0 1rem}
+h1{font-family:"Spectral",serif; font-weight:700; font-size:2.2rem; line-height:1.14; letter-spacing:-.01em; margin:.2rem 0 .5rem; color:#f2f4fb}
+h1 .sub{display:block; font-family:"Newsreader",serif; font-weight:400; font-style:italic; font-size:1.12rem; line-height:1.42; color:var(--peri); margin-top:.7rem; letter-spacing:0}
+.byline{font-size:.98rem; color:var(--soft); margin:1.1rem 0 .2rem; line-height:1.5}
+.byline b{color:var(--gold2); font-weight:600}
+.tags{display:flex; flex-wrap:wrap; gap:.4rem; margin:1.1rem 0 .4rem}
+.tag{font-family:"IBM Plex Mono",monospace; font-size:.66rem; letter-spacing:.03em; color:var(--gold); border:1px solid var(--line); border-radius:2px; padding:.16rem .5rem; background:#121838}
+h2{font-family:"Spectral",serif; font-weight:700; font-size:1.52rem; line-height:1.2; margin:3rem 0 .3rem; padding-top:.7rem; border-top:1px solid var(--line); color:#f2f4fb}
+h2 .n{color:var(--gold); font-family:"IBM Plex Mono",monospace; font-size:1rem; font-weight:500; margin-right:.5rem; vertical-align:.08em}
+h3{font-family:"Spectral",serif; font-weight:600; font-size:1.15rem; margin:2rem 0 .3rem; color:#eaeefb}
+p{margin:.85rem 0}
+a{color:var(--gold); text-decoration:none; border-bottom:1px solid rgba(212,168,67,.34)}
+a:hover{border-bottom-color:var(--gold); color:var(--gold2)}
+strong{font-weight:600; color:#f2f4fb}
+em{color:#eef1fb}
+sup a{border:none; font-size:.72em}
+.lead{font-size:1.06rem; color:#eef1fb}
+.banner{font-family:"IBM Plex Mono",monospace; font-size:.7rem; letter-spacing:.14em; text-transform:uppercase; color:var(--gold); margin:0 0 .2rem}
+
+.tldr-wrap{background:linear-gradient(180deg,#141b40,#101636); border:1px solid var(--tldrline); border-left:3px solid var(--gold); border-radius:8px; padding:1.3rem 1.4rem; margin:1.4rem 0}
+.tldr-wrap h2{border:none; margin:0 0 .3rem; padding:0; font-size:1.4rem; color:#f4f6fc}
+.tldr-wrap .k{font-weight:600; color:var(--gold2)}
+.tldr-wrap p{font-size:1.0rem; margin:.6rem 0; color:#e7ebf7}
+.tldr-list{list-style:none; padding:0; margin:.8rem 0 0}
+.tldr-list li{position:relative; padding:.38rem 0 .38rem 1.5rem; font-size:.98rem; border-top:1px solid rgba(212,168,67,.16); color:#e2e7f6}
+.tldr-list li:first-child{border-top:none}
+.tldr-list li::before{content:"▸"; position:absolute; left:.1rem; color:var(--gold)}
+.tldr-list b{color:var(--gold2)}
+
+.note{background:var(--panel); border:1px solid var(--line); border-radius:6px; padding:.9rem 1.1rem; margin:1.3rem 0; font-size:.92rem; color:var(--soft)}
+.note b{color:#eef1fb}
+
+figure.proc{margin:1.4rem 0 .4rem; text-align:center}
+figure.proc svg{width:100%; height:auto; max-width:760px; border:1px solid var(--line); border-radius:8px; background:var(--navy2); padding:.5rem}
+figure.proc figcaption{font-style:italic; color:var(--soft); font-size:.84rem; margin-top:.5rem}
+
+details.tech{background:var(--panel2); border:1px solid var(--line); border-radius:6px; margin:1.1rem 0; overflow:hidden}
+details.tech>summary{cursor:pointer; list-style:none; padding:.7rem 1.05rem; font-family:"IBM Plex Mono",monospace; font-size:.74rem; letter-spacing:.05em; color:var(--ox); user-select:none; display:flex; align-items:center; gap:.5rem}
+details.tech>summary::-webkit-details-marker{display:none}
+details.tech>summary .chev{transition:transform .18s ease; display:inline-block}
+details.tech[open]>summary .chev{transform:rotate(90deg)}
+details.tech>summary:hover{color:#e58a63}
+details.tech>summary .tag-tech{margin-left:auto; font-size:.6rem; letter-spacing:.1em; text-transform:uppercase; color:var(--faint)}
+details.tech .body{padding:.2rem 1.15rem 1rem; font-size:.95rem; border-top:1px solid var(--line); color:#dde3f4}
+
+.prim{border:1px solid var(--line); border-radius:8px; padding:1rem 1.15rem; margin:1.1rem 0; background:var(--panel)}
+.prim .p-id{font-family:"IBM Plex Mono",monospace; font-size:.66rem; letter-spacing:.1em; text-transform:uppercase; color:var(--gold); margin-bottom:.15rem}
+.prim h3{margin:.1rem 0 .35rem; font-size:1.08rem; color:#f2f4fb}
+.prim h3 .badge{font-family:"IBM Plex Mono",monospace; font-size:.6rem; font-weight:500; letter-spacing:.06em; text-transform:uppercase; color:var(--navy); background:var(--gold); border-radius:3px; padding:.12rem .44rem; margin-left:.5rem; vertical-align:.18em}
+.prim h3 .badge.new{background:var(--ox); color:#fff}
+.prim p{margin:.4rem 0; font-size:.96rem; color:#dde3f4}
+.prim .was{font-size:.82rem; color:var(--faint); font-family:"IBM Plex Mono",monospace}
+
+.tbl{width:100%; border-collapse:collapse; margin:1.2rem 0; font-size:.9rem}
+.tbl caption{font-style:italic; color:var(--soft); text-align:left; font-size:.86rem; margin-bottom:.5rem}
+.tbl th,.tbl td{text-align:left; padding:.5rem .6rem; border-bottom:1px solid var(--line2); vertical-align:top; color:#dde3f4}
+.tbl th{font-family:"IBM Plex Mono",monospace; font-weight:500; font-size:.72rem; letter-spacing:.04em; text-transform:uppercase; color:var(--gold); border-bottom:1px solid var(--line)}
+.tbl tr:last-child td{border-bottom:1px solid var(--line)}
+.tbl td b{color:var(--gold2)}
+
+.axes{display:grid; grid-template-columns:1fr 1fr 1fr; gap:.7rem; margin:1.2rem 0}
+.axis{border:1px solid var(--line); border-radius:8px; padding:.85rem .9rem; background:var(--panel)}
+.axis .ax-lab{font-family:"IBM Plex Mono",monospace; font-size:.62rem; letter-spacing:.1em; text-transform:uppercase; color:var(--gold); margin-bottom:.3rem}
+.axis .ax-name{font-family:"Spectral",serif; font-weight:600; font-size:.98rem; margin-bottom:.35rem; color:#eaeefb}
+.axis ul{margin:.2rem 0 0; padding-left:1.05rem; font-size:.82rem; color:var(--soft); line-height:1.5}
+.axis ul b{color:var(--peri)}
+@media(max-width:640px){.axes{grid-template-columns:1fr}}
+
+code{font-family:"IBM Plex Mono",monospace; font-size:.84em; background:var(--panel2); color:var(--gold2); padding:.08em .35em; border-radius:3px; border:1px solid var(--line2)}
+pre{background:#070a1c; color:#dbe1f2; font-family:"IBM Plex Mono",monospace; font-size:.78rem; line-height:1.55; padding:.9rem 1rem; border-radius:8px; overflow-x:auto; margin:1.1rem 0; border:1px solid var(--line)}
+pre code{background:none; border:none; color:inherit; padding:0}
+pre .g{color:#8fd4c2}
+hr{border:none; border-top:1px solid var(--line); margin:2.4rem 0}
+ol.refs{font-size:.86rem; color:var(--soft); padding-left:1.4rem}
+ol.refs li{margin:.5rem 0}
+.callout{border:1px solid var(--tldrline); background:#121838; border-radius:8px; padding:1rem 1.15rem; margin:1.4rem 0}
+.callout .lab{font-family:"IBM Plex Mono",monospace; font-size:.64rem; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); font-weight:500; display:block; margin-bottom:.3rem}
+.callout p{color:#e2e7f6}
+.warn{border-left:3px solid var(--ox); background:#241826}
+.warn .lab{color:var(--ox)}
+
+#studio{background:linear-gradient(180deg,#101636,#0c1030); border:1px solid var(--line); border-radius:12px; padding:1.5rem 1.4rem; margin:1.6rem 0}
+#studio h2{border:none; padding:0; margin:0 0 .2rem; color:#f4f6fc}
+.studio-sub{color:var(--soft); font-size:.98rem; margin:.3rem 0 1rem}
+.pick-lab{font-family:"IBM Plex Mono",monospace; font-size:.66rem; letter-spacing:.1em; text-transform:uppercase; color:var(--gold); margin:1.1rem 0 .5rem; display:flex; align-items:center; gap:.5rem}
+.pick-lab .num{background:var(--gold); color:var(--navy); border-radius:50%; width:1.25rem; height:1.25rem; display:inline-flex; align-items:center; justify-content:center; font-size:.66rem; font-weight:600}
+.chips{display:flex; flex-wrap:wrap; gap:.4rem}
+.chip{font-family:"IBM Plex Mono",monospace; font-size:.72rem; letter-spacing:.01em; border:1px solid var(--line); background:var(--panel); color:#dbe1f2; border-radius:20px; padding:.34rem .72rem; cursor:pointer; transition:.12s; user-select:none}
+.chip:hover{border-color:var(--gold); color:#fff}
+.chip.on{background:var(--gold); color:var(--navy); border-color:var(--gold); font-weight:500}
+.chip.stage.on{background:var(--ox); color:#fff; border-color:var(--ox)}
+.stage-hint{font-size:.84rem; color:var(--peri); margin:.5rem 0 0; min-height:1.2em; font-style:italic}
+.gen-lab{font-family:"IBM Plex Mono",monospace; font-size:.66rem; letter-spacing:.1em; text-transform:uppercase; color:var(--gold); margin:1.3rem 0 .4rem}
+#genPrompt{width:100%; min-height:230px; font-family:"IBM Plex Mono",monospace; font-size:.76rem; line-height:1.55; color:#dbe1f2; background:#070a1c; border:1px solid var(--line); border-radius:8px; padding:.85rem .95rem; resize:vertical}
+#genPrompt:focus{outline:none; border-color:var(--gold)}
+.studio-actions{display:flex; flex-wrap:wrap; gap:.5rem; margin-top:.7rem}
+.studio-actions button{font-family:"IBM Plex Mono",monospace; font-size:.72rem; letter-spacing:.02em; cursor:pointer; border-radius:6px; padding:.5rem .85rem; border:1px solid var(--line); background:var(--panel); color:#dbe1f2}
+.studio-actions button:hover{border-color:var(--gold); color:#fff}
+.studio-actions button.go{background:var(--gold); color:var(--navy); border-color:var(--gold); font-weight:500}
+.studio-actions button.go:hover{background:var(--gold2); border-color:var(--gold2); color:var(--navy)}
+.ladder{margin:1.3rem 0 0; border-top:1px solid var(--line); padding-top:1rem}
+.ladder ol{padding-left:1.3rem; margin:.4rem 0; font-size:.92rem; color:#dde3f4}
+.ladder li{margin:.3rem 0}
+.ladder li b{color:var(--gold2)}
+
+footer{max-width:var(--maxw); margin:2.5rem auto 0; padding:1.8rem 22px 4rem; border-top:1px solid var(--line); font-size:.86rem; color:var(--soft)}
+.cite{background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:1rem 1.15rem; margin:1.1rem 0; font-size:.88rem}
+.cite .lab{font-family:"IBM Plex Mono",monospace; font-size:.64rem; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); display:block; margin-bottom:.4rem}
+.cite code{display:block; background:#070a1c; border:1px solid var(--line); padding:.6rem .7rem; border-radius:4px; font-size:.78rem; line-height:1.5; white-space:pre-wrap; word-break:break-word; color:#dbe1f2}
+.copybtn{font-family:"IBM Plex Mono",monospace; font-size:.66rem; letter-spacing:.04em; cursor:pointer; border:1px solid var(--gold); color:var(--gold); background:transparent; border-radius:4px; padding:.28rem .6rem; margin-top:.5rem}
+.copybtn:hover{background:var(--gold); color:var(--navy)}
+
+.lic{display:grid; grid-template-columns:1fr 1fr; gap:.7rem; margin:1.2rem 0}
+.lic .card{border:1px solid var(--line); border-radius:8px; padding:.8rem .95rem; background:var(--panel)}
+.lic .card .w{font-family:"Spectral",serif; font-weight:600; font-size:.98rem; margin-bottom:.2rem; color:#eaeefb}
+.lic .card .spdx{font-family:"IBM Plex Mono",monospace; font-size:.66rem; color:var(--gold); background:#1a2147; border:1px solid var(--tldrline); border-radius:3px; padding:.06rem .4rem; display:inline-block; margin-bottom:.35rem}
+.lic .card p{font-size:.85rem; margin:.2rem 0 0; color:var(--soft)}
+@media(max-width:640px){.lic{grid-template-columns:1fr}}
+
+.share{display:flex; flex-wrap:wrap; gap:.5rem; margin:1.2rem 0}
+.share a,.share button{display:inline-flex; align-items:center; gap:.35rem; font-family:"IBM Plex Mono",monospace; font-size:.68rem; letter-spacing:.03em; text-decoration:none; border:1px solid var(--line); color:#dbe1f2; background:var(--panel); border-radius:6px; padding:.4rem .7rem; cursor:pointer}
+.share a:hover,.share button:hover{border-color:var(--gold); color:var(--gold)}
+.share svg{width:14px; height:14px; fill:currentColor}
+
+#aibar{position:absolute; z-index:9999; display:none; background:#060818; border:1px solid var(--line); border-radius:8px; padding:.35rem; box-shadow:0 8px 28px rgba(0,0,0,.5); font-family:"IBM Plex Mono",monospace}
+#aibar .row{display:flex; gap:.25rem; align-items:center}
+#aibar button{background:transparent; border:none; color:#dbe1f2; font-family:inherit; font-size:.72rem; letter-spacing:.02em; padding:.34rem .55rem; border-radius:5px; cursor:pointer; white-space:nowrap}
+#aibar button:hover{background:rgba(255,255,255,.1)}
+#aibar button.brand-claude:hover{background:#a8613a}
+#aibar button.brand-gpt:hover{background:#0f766e}
+#aibar button.brand-plx:hover{background:#3b6ea5}
+#aibar .sep{width:1px; height:18px; background:rgba(255,255,255,.18)}
+#aibar .hint{color:var(--gold); font-size:.62rem; padding:0 .4rem}
+#toast{position:fixed; bottom:22px; left:50%; transform:translateX(-50%) translateY(20px); background:#060818; border:1px solid var(--line); color:#fff; font-family:"IBM Plex Mono",monospace; font-size:.76rem; padding:.6rem 1rem; border-radius:6px; opacity:0; transition:.24s; z-index:10000; pointer-events:none}
+#toast.show{opacity:1; transform:translateX(-50%) translateY(0)}
+::selection{background:rgba(212,168,67,.26); color:#fff}
+
+</style>
+</head>
+<body>
+
+<header class="top">
+  <p class="eyebrow">Research Proposal · Health Informatics × Human–AI Co-Development · 2026</p>
+  <h1>VGC-Health: A Verification-Gated Clinical Co-Development Manifold
+    <span class="sub">How clinicians and other health professionals can contribute to a shared, versioned, falsifiable knowledge system — without writing code — across mind, body and society; every care setting; and every specialty.</span>
+  </h1>
+  <p class="byline"><b>Abhishek Choudhary</b><br>AyeAI · Hyderabad, India</p>
+  <div class="tags">
+    <span class="tag">Health Informatics</span><span class="tag">Clinical Decision Support</span><span class="tag">Human–AI Collaboration</span><span class="tag">ABDM / FHIR</span><span class="tag">Proposal</span>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="note">
+    <b>How to read this.</b> The <b>TL;DR</b> and a <b>picture of the process</b> come first — read only those and you have the whole idea. Then a hands-on <b>Prompt Studio</b> lets you walk any healthcare problem through the method, step by step, with ready-made prompts. The <b>full technical paper</b> is folded below for those who want it. You never need to touch the engineering to take part. You can also <b>select any passage</b> → an <b>“Ask AI ▾”</b> toolbar appears (or right-click a selection) to send it, with full context, to Claude / ChatGPT / Perplexity.
+  </div>
+
+  <!-- ===================== TL;DR ===================== -->
+  <section id="tldr">
+    <div class="tldr-wrap">
+      <p class="banner">TL;DR — the whole thing in plain language</p>
+      <h2>Let doctors contribute knowledge — and let a machine check it — before anyone trusts it.</h2>
+      <p>Doctors hold most of the useful knowledge in medicine, but there is no easy, trustworthy way to put a clinical rule, a case pattern, or an outcome observation into a <span class="k">shared</span> system that others can use, check and build on. Meanwhile AI can draft clinical text fast — but clinicians rightly distrust anything they cannot verify. <span class="k">VGC-Health</span> joins the two: a clinician contributes in <span class="k">plain language</span>, and nothing is accepted until an independent <span class="k">gate</span> (guidelines, outcome data, a second reviewer) confirms it. It extends a proven software method, <a href="#paper">VGC</a>, into healthcare.</p>
+      <ul class="tldr-list">
+        <li><b>Contribute without coding.</b> State a rule or observation in your own words; the system does the rest.</li>
+        <li><b>Nothing is trusted until it's checked.</b> Every entry passes a <b>multi-oracle gate</b>, or is honestly marked "can't verify yet" — never silently accepted.</li>
+        <li><b>Three axes that never collapse.</b> Every entry is tagged by <b>domain</b> (mind / body / society), <b>care setting</b> (clinic → ICU → hospice → home) and <b>system</b> (records, claims, trials, devices) — so it's findable from all three.</li>
+        <li><b>One manifold, the whole spectrum.</b> Specialties &amp; superspecialties, day-care to hospice, hospital management, epidemiology, drug &amp; device trials, HTA, medical robotics, billing &amp; insurance — each a filtered view of one gated source, not a new silo.</li>
+        <li><b>Accountability is built in.</b> A named clinician signs off before anything touches real care; that signature is recorded immutably (the <b>Regulatory Provenance Ledger</b>).</li>
+        <li><b>Start small, prove it, then widen.</b> A tiny pilot: one protocol, 3–5 clinicians, decision-<b>support</b> only, no live patients — measured on how fast contributions are gated and how often reviewers agree.</li>
+        <li><b>Honest limits.</b> Good clinical oracles are hard to build; adoption isn't guaranteed. This is a proposal to be tested and, if wrong, falsified.</li>
+      </ul>
+    </div>
+
+    <figure class="proc">
+      <svg viewBox="0 0 920 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The VGC process, from requirements to DOI and OpenTimestamps">
+        <defs>
+          <marker id="ah" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#d4a843"/></marker>
+          <marker id="ah2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#7fb0d4"/></marker>
+        </defs>
+        <text x="460" y="26" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="12" letter-spacing="2" fill="#d4a843">THE VGC LOOP</text>
+        <g font-family="Spectral,serif" font-size="14" fill="#e7ebf7" text-anchor="middle">
+          <rect x="70"  y="44" width="150" height="46" rx="8" fill="#161d42" stroke="#2e3670"/><text x="145" y="72">Intent (human)</text>
+          <rect x="300" y="44" width="150" height="46" rx="8" fill="#141a3a" stroke="#28305a"/><text x="375" y="72">Execution (AI)</text>
+          <rect x="530" y="44" width="150" height="46" rx="8" fill="#241826" stroke="#d1704a"/><text x="605" y="65" font-weight="600" fill="#f0c19a">Gate</text><text x="605" y="82" font-size="11" fill="#d1704a">the oracle decides</text>
+          <rect x="760" y="44" width="120" height="46" rx="8" fill="#161d42" stroke="#d4a843"/><text x="820" y="66">Accept</text><text x="820" y="82" font-size="11" fill="#d4a843">or repair &#8634;</text>
+        </g>
+        <g stroke-width="2" fill="none">
+          <path d="M220,67 L298,67" stroke="#d4a843" marker-end="url(#ah)"/>
+          <path d="M450,67 L528,67" stroke="#d4a843" marker-end="url(#ah)"/>
+          <path d="M680,67 L758,67" stroke="#d4a843" marker-end="url(#ah)"/>
+          <path d="M760,90 C640,150 460,150 375,92" stroke="#7fb0d4" stroke-dasharray="4 4" marker-end="url(#ah2)"/>
+        </g>
+        <text x="565" y="150" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="10.5" fill="#aeb8d8">fails &#8594; returns with the failing oracle output, patched by exact anchor</text>
+        <text x="460" y="196" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="12" letter-spacing="2" fill="#d4a843">FROM PRE-ARCHITECTURE TO A CITABLE, TIMESTAMPED RECORD</text>
+        <g font-family="'IBM Plex Mono',monospace" font-size="10.5" fill="#e7ebf7" text-anchor="middle">
+          <g>
+            <rect x="20"  y="214" width="104" height="40" rx="6" fill="#141a3a" stroke="#28305a"/><text x="72"  y="232">0 Requirements</text><text x="72" y="246" fill="#828cb2">context contract</text>
+            <rect x="134" y="214" width="104" height="40" rx="6" fill="#141a3a" stroke="#28305a"/><text x="186" y="232">1 Architecture</text><text x="186" y="246" fill="#828cb2">3 axes</text>
+            <rect x="248" y="214" width="104" height="40" rx="6" fill="#141a3a" stroke="#28305a"/><text x="300" y="232">2 Reference</text><text x="300" y="246" fill="#828cb2">grounded draft</text>
+            <rect x="362" y="214" width="104" height="40" rx="6" fill="#241826" stroke="#d1704a"/><text x="414" y="232" font-weight="600" fill="#f0c19a">3 Gate</text><text x="414" y="246" fill="#d1704a">multi-oracle</text>
+            <rect x="476" y="214" width="104" height="40" rx="6" fill="#141a3a" stroke="#28305a"/><text x="528" y="232">4 Verify loop</text><text x="528" y="246" fill="#828cb2">honest deferral</text>
+            <rect x="590" y="214" width="104" height="40" rx="6" fill="#141a3a" stroke="#28305a"/><text x="642" y="232">5 Reconcile</text><text x="642" y="246" fill="#828cb2">diff to zero</text>
+            <rect x="704" y="214" width="104" height="40" rx="6" fill="#141a3a" stroke="#28305a"/><text x="756" y="232">6 Package</text><text x="756" y="246" fill="#828cb2">+ licences</text>
+            <rect x="818" y="214" width="82"  height="40" rx="6" fill="#161d42" stroke="#d4a843"/><text x="859" y="232" font-weight="600" fill="#d4a843">7 DOI</text><text x="859" y="246" fill="#d4a843">+ OTS</text>
+          </g>
+          <g stroke="#d4a843" stroke-width="1.5" fill="none">
+            <path d="M124,234 L132,234" marker-end="url(#ah)"/><path d="M238,234 L246,234" marker-end="url(#ah)"/>
+            <path d="M352,234 L360,234" marker-end="url(#ah)"/><path d="M466,234 L474,234" marker-end="url(#ah)"/>
+            <path d="M580,234 L588,234" marker-end="url(#ah)"/><path d="M694,234 L702,234" marker-end="url(#ah)"/>
+            <path d="M808,234 L816,234" marker-end="url(#ah)"/>
+          </g>
+          <path d="M528,214 C528,196 300,196 300,212" stroke="#7fb0d4" stroke-width="1.5" stroke-dasharray="4 4" fill="none" marker-end="url(#ah2)"/>
+        </g>
+        <text x="460" y="288" text-anchor="middle" font-family="Newsreader,serif" font-style="italic" font-size="12" fill="#aeb8d8">The gate is the point. Everything else serves it.</text>
+      </svg>
+      <figcaption>Figure 1 &#183; The method, twice. Top: every change moves intent &#8594; execution &#8594; gate, and is accepted only if an oracle confirms it (else it loops back). Bottom: the same discipline carries a project from requirements all the way to a citable DOI and a cryptographic timestamp.</figcaption>
+    </figure>
+
+    <div class="share" id="shareTop"></div>
+  </section>
+
+  <!-- ===================== PROMPT STUDIO ===================== -->
+  <section id="studio">
+    <p class="banner">Hands-on · no coding required</p>
+    <h2>VGC Prompt Studio — walk your problem through the method</h2>
+    <p class="studio-sub">Pick a slice of the healthcare space and a stage of the method. The Studio writes you a ready-to-use, context-grounded prompt — then hands it to Claude, ChatGPT or Perplexity, or copies it for anywhere. This is the same path used to build CHAKRA end to end: from the first requirements conversation to minting a DOI and stamping it. Work one stage at a time; paste each result back and move to the next.</p>
+
+    <div class="pick-lab"><span class="num">1</span> Choose a healthcare area</div>
+    <div class="chips" id="areaChips"></div>
+
+    <div class="pick-lab"><span class="num">2</span> Choose a stage of the method</div>
+    <div class="chips" id="stageChips"></div>
+    <p class="stage-hint" id="stageHint">Pick a stage to see what it does.</p>
+
+    <div class="gen-lab">Your generated prompt</div>
+    <textarea id="genPrompt" spellcheck="false" aria-label="Generated prompt"></textarea>
+    <div class="studio-actions">
+      <button class="go" data-p="claude">Open in Claude ↗</button>
+      <button class="go" data-p="chatgpt">Open in ChatGPT ↗</button>
+      <button class="go" data-p="perplexity">Open in Perplexity ↗</button>
+      <button data-p="copy">⧉ Copy prompt</button>
+    </div>
+
+    <div class="ladder">
+      <p class="banner" style="color:var(--accent2)">The eight stages at a glance</p>
+      <ol>
+        <li><b>Requirements &amp; pre-architecture</b> — pin down what you're building and how you'll know it's right (the context contract). No design yet.</li>
+        <li><b>Architecture</b> — lay out the three non-collapsing axes; name the canonical source of truth and what the verifier will be.</li>
+        <li><b>Reference draft</b> — produce the first version, grounding every clinical rule in a retrieved current guideline; flag anything unverifiable.</li>
+        <li><b>The gate</b> — build the multi-oracle: guideline conformance, outcome-regression, second-clinician review, parity for deterministic sub-logic.</li>
+        <li><b>Verify loop</b> — gate every artifact; repair only by exact anchor; never mark unverified work as done.</li>
+        <li><b>Reconcile</b> — re-adopt the canonical state and the latest guideline versions; diff to zero; list drift.</li>
+        <li><b>Package &amp; licence</b> — choose licences (docs / code / data / patentable methods), write provenance and a citation entry.</li>
+        <li><b>DOI + OpenTimestamps</b> — build the metadata, dry-run offline, then the gated mint and timestamp. Irreversible steps stay gated.</li>
+      </ol>
+      <div class="callout" style="margin-top:1rem">
+        <span class="lab">Open science, or proprietary — you choose per artifact</span>
+        <p><strong>Proprietary is welcome, and patents are encouraged</strong> — where a method is genuinely novel, protecting it can be the right call, and AyeAI offers consulting on patent strategy and filing. But weigh it against what <strong>open science and open source</strong> buy you: a gated, openly published artifact is <em>independently checkable</em>, <em>timestamped</em>, and <em>citable by DOI</em> — which compounds into credibility, reuse, and trust in a way a closed artifact cannot. A common, sensible split: keep the patentable core proprietary, and open the surrounding tooling, data schemas and documentation.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ===================== FULL PAPER ===================== -->
+  <section id="paper">
+  <p class="banner">The full proposal · for readers who want the detail</p>
+
+  <p class="eyebrow" style="margin-top:1rem">Abstract</p>
+  <p class="lead">Modern language models can draft clinical text and code quickly, yet clinicians rightly distrust output they cannot verify, and the health system remains fragmented: practice, research, education and outcomes sit in silos, and most of the richest patient information — the physician's own notes and reasoning — never becomes shared, structured, checkable knowledge. We propose <strong>VGC-Health</strong>, a direct extension of <em>Verification-Gated Human–AI Co-Development</em> (VGC)<sup><a href="#r1">[1]</a></sup> — a methodology in which no generated artifact is accepted until an independent, machine-checkable oracle confirms it — from software into clinical knowledge. The central move is to let a clinician <em>contribute by stating intent in natural language</em> and to route every contribution through a <em>multi-oracle gate</em> before it enters a shared, versioned <em>knowledge manifold</em>. We redefine VGC's six collaboration primitives for a clinical setting, add a healthcare-specific primitive — a <em>Regulatory Provenance Ledger</em> recording which named, accountable clinician approved which version — and specify a small, falsifiable pilot with pre-registered metrics. The same manifold, queried along three non-collapsing axes (domain, care-setting, system), serves specialties and superspecialties, day-care through hospice, hospital management, epidemiology, drug-trial support, health-technology assessment, medical devices and robotics, and billing/insurance — and slots into national digital-health infrastructure rather than replacing it. Threats to validity are stated candidly. The transferable contribution is not any single clinical rule; it is the <em>gate</em>, and a contribution path a clinician will actually use.</p>
+
+  <h2><span class="n">1</span>The problem: knowledge that never becomes shared knowledge</h2>
+  <p>Contemporary digital-health work, in India and elsewhere, has made real progress on the lower layers: coded lab data, imaging informatics and medication data are increasingly standardised, national digital-health platforms and identity spines exist, and interoperability standards are maturing. Yet the reported bottlenecks are consistent, and not primarily technical. In an ongoing practitioner research discussion on the state of digital health and AI, a clinician-researcher framed the gaps precisely: the richest patient information — <em>physician notes and clinical reasoning, on the order of two-thirds of the useful signal</em> — is still poorly captured; interoperability is operationally hard even where standards are clear; there is little urgency around converting clinical <em>data</em> into clinical <em>intelligence</em>; delivery, research, education and outcome research remain siloed; and there is no alignment between the clinical ecosystem and the insurance and regulatory bodies who could reduce the cost of care through scientific, informatics-driven claims processing. The same discussion stressed that <em>clinical explainability</em>, <em>clearly defined intelligence objectives</em>, <em>data literacy among clinicians</em>, a <em>clinical</em> data architecture complementing the IT one, and a larger pool of clinical data scientists are the levers — and that <em>data in silos always yields sub-optimal outputs</em>.</p>
+  <p>We take these observations as the design brief. The common thread is a <em>missing contribution mechanism</em>: no low-friction, trust-preserving way for a clinician to move a piece of their own judgment into a shared, structured, checkable form that research, education, outcomes work and downstream systems (claims, HTA, trials) can all draw on. More storage does not fix this; the manifold is not a database, it is a <em>gated contribution loop</em>.</p>
+  <details class="tech">
+    <summary><span class="chev">▸</span> Technical detail — why this is a knowledge-representation problem, not a storage problem <span class="tag-tech">optional</span></summary>
+    <div class="body">
+      <p>A relational or FHIR-native store answers "what happened to this patient?" It does not answer "what does the profession collectively believe, at version <em>v</em>, about pattern <em>P</em> — and what evidence gates that belief?" The latter is a <em>manifold</em> in the informal sense we use: a structured space of assertions, each carrying (i) a natural-language statement, (ii) an axis-tagged position, (iii) a verification record, (iv) a provenance/accountability record, and (v) a version lineage under exact-anchor revision. FHIR resources remain the <em>substrate</em> the manifold reads from and writes decision-support into; the manifold is the <em>epistemic</em> layer above it. This keeps clinical assertions interoperable-by-reference without conflating "a fact about a patient" with "a gated belief of the profession."</p>
+    </div>
+  </details>
+
+  <h2><span class="n">2</span>Background: what VGC is, and why it transfers</h2>
+  <p>Verification-Gated Human–AI Co-Development<sup><a href="#r1">[1]</a></sup> is a loop in which a senior human directs an AI executor and <em>acceptance belongs to a machine-checkable oracle, never to either party</em>. Its load-bearing innovation is a <em>cross-representation parity oracle</em>: an independent second implementation, in a different language with different failure modes, checked field-by-field against the reference — converting "the AI probably got it right" into thousands of passing assertions. The published case study (CHAKRA, an offline astronomical/calendrical engine) reported a 74-file, six-language system verified continuously by a 120-assertion suite and a 6,590-check parity harness, built for a small fraction of conventional cost. The paper's own honest caveat is the one that matters most here: VGC's leverage is <em>domain-shaped</em> — it excels where correctness is <em>checkable</em>, and degrades "where the oracle is as hard to build as the system." Healthcare is exactly such a hard-oracle domain — which is why the health version needs a <em>different, multi-part gate</em> rather than a single arithmetic one.</p>
+  <div class="callout">
+    <span class="lab">The core shift</span>
+    <p>CHAKRA's oracle was cheap: astronomy is right to arc-minutes or wrong. Healthcare has <em>no single arithmetic oracle</em> — correctness is at once clinical, evidential, regulatory and probabilistic. So VGC-Health replaces the one parity harness with a <em>stack of parallel oracles that must each pass</em>, and treats "no oracle available" as an explicit, tracked state rather than a silent acceptance.</p>
+  </div>
+
+  <h2><span class="n">3</span>The health manifold: three axes that must never collapse</h2>
+  <p>A recurring failure in health IT is <em>axis collapse</em> — folding a rich, multi-dimensional clinical assertion into a single flat category (a form field, an app screen) and losing the other dimensions along which it is useful. VGC-Health forbids this structurally: every entry is positioned on three orthogonal axes, and queries filter along any combination.</p>
+  <div class="axes">
+    <div class="axis">
+      <div class="ax-lab">Axis 1 · Domain</div>
+      <div class="ax-name">Mind · Body · Society</div>
+      <ul><li><b>Mind</b> — psychiatry, neurology, palliative psychology, cognition</li><li><b>Body</b> — all organ-system specialties &amp; superspecialties</li><li><b>Society</b> — epidemiology, public &amp; population health, HTA</li></ul>
+    </div>
+    <div class="axis">
+      <div class="ax-lab">Axis 2 · Care setting</div>
+      <div class="ax-name">Where care happens</div>
+      <ul><li>Outpatient / day-care</li><li>Inpatient / ward / ICU</li><li>Hospice &amp; palliative</li><li>Home &amp; community care</li></ul>
+    </div>
+    <div class="axis">
+      <div class="ax-lab">Axis 3 · System</div>
+      <div class="ax-name">What it touches</div>
+      <ul><li>HMS / EHR workflows</li><li>Insurance &amp; claims logic</li><li>Drug-trial protocols</li><li>Device &amp; robotics interfaces</li></ul>
+    </div>
+  </div>
+  <p>The axes are <em>independent coordinates</em>, not a hierarchy. A single assertion — say, a drug-interaction rule in a psychiatric inpatient on a specific claims pathway — is one entry, findable from all three directions, rather than three disconnected records.</p>
+  <details class="tech">
+    <summary><span class="chev">▸</span> Technical detail — entry schema and enforced orthogonality <span class="tag-tech">optional</span></summary>
+    <div class="body">
+      <p>Each entry is a tuple \(\;e = \langle s,\vec{a},V,L,\pi \rangle\): \(s\) natural-language statement; \(\vec{a}=(a_1,a_2,a_3)\) the axis position; \(V\) the verification record (which oracles ran, outputs, pass/defer/fail); \(L\) the version lineage (parent + exact-anchor diff); \(\pi\) the provenance/accountability record. Orthogonality is enforced at contribution time: the UI requires an explicit position on all three axes and rejects entries that encode a second axis inside the first. Queries are set operations over axis coordinates, so the same entry is reachable independently by domain, by setting, and by system. No axis is ever the "primary key" — this is what stops the manifold degenerating into another siloed EHR feature.</p>
+    </div>
+  </details>
+
+  <h2><span class="n">4</span>The contribution loop: VGC's primitives, redefined for clinicians</h2>
+  <p>VGC's six primitives were written for code. Below, each is restated for a clinical contributor, preserving the essential property — <em>acceptance belongs to an oracle, not the author</em> — while replacing the software-specific oracle with clinically appropriate ones. A seventh, healthcare-specific primitive is added.</p>
+
+  <div class="prim"><div class="p-id">Primitive H1 · from VGC P1</div><h3>Multi-Oracle Gate <span class="badge">core</span></h3><p class="was">was: single cross-representation parity oracle</p><p>A contribution must pass <em>several independent checks in parallel</em>: (a) <b>guideline conformance</b> against current, coded clinical-practice-guideline text (retrieved live, not recalled); (b) an <b>outcome-regression check</b> against known-ground-truth data where it exists; (c) a <b>second-clinician review</b> for anything without hard data. Where logic <em>is</em> deterministic — dosage, eligibility, coding — the original parity idea still applies: a second independent implementation pinned against the first.</p></div>
+  <div class="prim"><div class="p-id">Primitive H2 · from VGC P2</div><h3>Exact-Anchor Revision <span class="badge">auditability</span></h3><p class="was">was: exact-anchor patching of source files</p><p>An update must cite <em>exactly</em> which prior assertion and version it revises; whole-entry regeneration is forbidden, and if the anchor isn't uniquely found the revision aborts. Silent drift in a dosing rule is a patient-safety event, not a merge conflict.</p></div>
+  <div class="prim"><div class="p-id">Primitive H3 · from VGC P3</div><h3>Clinical Guarded Irreversibility <span class="badge">safety</span></h3><p class="was">was: dry-run-by-default for DOI/push/delete</p><p>Anything touching PHI, a prescription, a record, or a claim defaults to <em>simulation</em> and touches nothing live. Promotion to a real action requires explicit escalation <em>and</em> sign-off by a named, accountable clinician — not merely a typed confirmation. Data-protection duties are a <em>hard gate</em> here, not a footnote.</p></div>
+  <div class="prim"><div class="p-id">Primitive H4 · from VGC P4</div><h3>Source-of-Truth Reconciliation <span class="badge">coherence</span></h3><p class="was">was: re-adopt canonical repo, diff to zero</p><p>The canonical manifold is re-adopted at the start of any work, verifying agreement rather than assuming it — extended to reconciling against the <em>current version</em> of the relevant guideline or interaction database, because protocols update in ways constants never do.</p></div>
+  <div class="prim"><div class="p-id">Primitive H5 · from VGC P5</div><h3>Clinical-Precedent Grounding <span class="badge">anti-hallucination</span></h3><p class="was">was: read the existing code before rebuilding it</p><p>Before generating any clinical logic, the system <em>retrieves the actual current guideline/protocol text</em>, not the model's memorised version — countering the dominant AI failure mode (confidently reinventing something that already exists, subtly and dangerously differently) and making explainability concrete.</p></div>
+  <div class="prim"><div class="p-id">Primitive H6 · from VGC P6</div><h3>Honest Deferral <span class="badge">scope integrity</span></h3><p class="was">was: tracked backlog of unverified work</p><p>Anything the gate cannot verify is <em>logged as an open, tracked issue</em> — never faked, stubbed, or shipped as "done." Silently-dropped uncertainty is the dangerous failure mode; here it is made visible by construction.</p></div>
+  <div class="prim" style="border-color:var(--accent2)"><div class="p-id" style="color:var(--accent2)">Primitive H7 · new in VGC-Health</div><h3>Regulatory Provenance Ledger <span class="badge new">new</span></h3><p>Every accepted entry records <em>which named clinician/reviewer approved which version, when</em>. In software, "the oracle decided" suffices; in medicine a licensed professional is <em>legally accountable</em>, so the ledger records human approval as a first-class, immutable, timestamped fact — the auditable spine that lets the manifold be used in regulated settings without pretending the machine bears responsibility.</p></div>
+
+  <details class="tech">
+    <summary><span class="chev">▸</span> Technical detail — the loop as a state machine, and the "no-oracle" state <span class="tag-tech">optional</span></summary>
+    <div class="body">
+      <p>The loop is <code>intent → elicitation → oracle-stack → {accept | defer | repair}</code>. An entry \(e\) enters stack \(\Omega=\{\omega_1,\dots,\omega_k\}\); acceptance requires \(\bigwedge_i \omega_i(e)=\text{pass}\) for all oracles <em>applicable</em> to \(e\)'s axis position. Applicability is explicit: an assertion with no ground-truth data has \(\omega_\text{outcome}=\)<code>N/A</code>, and if the remaining oracles can't decide, \(e\) enters the <b>Open — Honest Deferral</b> state rather than <code>accept</code>. The manifold thus has a first-class "we don't yet know" value it never collapses into "true." Promotion from <code>accept-as-knowledge</code> to <code>act-on-patient</code> is a <em>separate</em> transition gated by H3 + H7, requiring a named clinician signature in the append-only ledger; no AI transition crosses this boundary autonomously — it is structural, not advisory.</p>
+    </div>
+  </details>
+
+  <h2><span class="n">5</span>The proposed experiment (pilot design)</h2>
+  <p>The experiment is deliberately narrow and falsifiable — an existence proof that the contribution loop works before any attempt to scale.</p>
+  <h3>5.1 Hypothesis</h3>
+  <p>A clinician who <em>does not write code</em> can contribute a clinical rule, case pattern, or outcome observation such that it is (i) gated against evidence and precedent, (ii) accepted, rejected, or honestly deferred with a legible rationale, and (iii) revised only by exact-anchor diff — and that this loop achieves useful inter-reviewer agreement at a contribution latency clinicians will tolerate.</p>
+  <h3>5.2 Scope (v0 — intentionally minimal)</h3>
+  <table class="tbl"><caption>Table 1 · Pilot scope and guardrails</caption>
+    <tr><th>Parameter</th><th>v0 setting</th><th>Why</th></tr>
+    <tr><td>Clinical slice</td><td>One narrow protocol (e.g. a single day-care procedure pathway)</td><td>Bounds the oracle-building cost</td></tr>
+    <tr><td>Contributors</td><td>3–5 clinicians</td><td>Enough for agreement; small enough to run honestly</td></tr>
+    <tr><td>Output class</td><td>Decision <em>support</em> only — flagging, never autonomous action</td><td>Sidesteps H3 irreversibility risk in v0</td></tr>
+    <tr><td>Patient contact</td><td>None live; retrospective / synthetic cases</td><td>No PHI exposure before governance is proven</td></tr>
+  </table>
+  <h3>5.3 Method &amp; pre-registered metrics</h3>
+  <p>Metrics are pre-registered to avoid post-hoc framing:</p>
+  <table class="tbl"><caption>Table 2 · Primary and secondary endpoints</caption>
+    <tr><th>Endpoint</th><th>Measure</th><th>Target (v0)</th></tr>
+    <tr><td>Contribution latency</td><td>Median time: assertion → gate verdict</td><td>Report; establish baseline</td></tr>
+    <tr><td>Inter-reviewer agreement</td><td>Concordance on H1(c)</td><td>Report with CI; \(\kappa\) statistic</td></tr>
+    <tr><td>Honest-deferral rate</td><td>Fraction correctly routed to "can't verify yet"</td><td>Non-zero and defensible</td></tr>
+    <tr><td>Explainability</td><td>Clinician-rated legibility of the rationale trace</td><td>Structured rating; report distribution</td></tr>
+    <tr><td>Zero-silent-accept</td><td>Entries accepted without a passing applicable oracle</td><td><b>Exactly 0</b> (safety invariant)</td></tr>
+  </table>
+  <details class="tech">
+    <summary><span class="chev">▸</span> Technical detail — reference architecture &amp; oracle stack <span class="tag-tech">optional</span></summary>
+    <div class="body">
+      <p><b>Substrate.</b> The manifold reads from and writes decision-support into a FHIR-native record layer; it does not replace it. Coded terminologies (ICD/SNOMED-class) anchor axis-1 positions and guideline lookups. <b>Oracle stack (H1).</b> \(\omega_\text{guideline}\): retrieval-grounded conformance against the current CPG version; \(\omega_\text{outcome}\): regression against held-out labelled cases where available; \(\omega_\text{review}\): blinded second-clinician adjudication; \(\omega_\text{parity}\): for deterministic sub-logic (dose, eligibility, coding), a second independent implementation pinned field-by-field. <b>Explainability.</b> Every accepted entry auto-emits a plain-language rationale trace naming the oracles that ran, the precedent grounded against, and the reviewer(s) of record. <b>Ledger (H7).</b> Append-only, hash-chained, independently exportable.</p>
+    </div>
+  </details>
+
+  <h2><span class="n">6</span>One manifold, the whole spectrum</h2>
+  <p>Because contributions are axis-tagged rather than app-bound, the wider health system consumes the <em>same</em> accepted, evidenced entries through different filters:</p>
+  <table class="tbl"><caption>Table 3 · The manifold as a shared source for the full spectrum of health work</caption>
+    <tr><th>Consumer</th><th>How it draws on the manifold</th></tr>
+    <tr><td>Specialties &amp; superspecialties</td><td>Filter axis-1 to a specialty's accepted rules and their precedent grounding</td></tr>
+    <tr><td>Day-care · ward · ICU · hospice · home</td><td>Filter axis-2; the same rule adapts across settings without duplication</td></tr>
+    <tr><td>Hospital management systems</td><td>Consume decision-support into HMS/EHR workflows via the FHIR substrate</td></tr>
+    <tr><td>Epidemiology &amp; population health</td><td>Aggregate axis-1 "society" entries for surveillance and population signals</td></tr>
+    <tr><td>Drug-trial support</td><td>Structured, gated entries feed protocol design, eligibility logic, safety rules</td></tr>
+    <tr><td>Health-Technology Assessment</td><td>Evidence-linked, provenance-carrying entries become citable HTA inputs</td></tr>
+    <tr><td>Medical devices &amp; robotics</td><td>Gated rules define device decision-support and robotic-interface constraints (under H3/H7)</td></tr>
+    <tr><td>Insurance &amp; claims</td><td>Scientific, informatics-driven claims logic from citable clinical entries — not ad-hoc heuristics</td></tr>
+  </table>
+  <div class="callout">
+    <span class="lab">Why this addresses the silo problem directly</span>
+    <p>Claims processing gaining a <em>citable clinical source</em> is what could finally align the clinical, insurance and regulatory ecosystems around one evidenced substrate. The scarce clinical-data-scientist talent concentrates at the <em>gate/oracle</em> layer, not at the point of clinical input — so clinicians contribute without needing that skillset, which is what makes broad participation feasible at all.</p>
+  </div>
+
+  <h2><span class="n">7</span>Governance, ethics &amp; regulatory posture</h2>
+  <p>The governance model is not layered on top; it <em>is</em> the primitives. H3 makes patient-facing action structurally impossible without named sign-off; H7 records that sign-off immutably; H6 makes uncertainty visible; H4/H5 keep the manifold grounded in current, real guidance. The pilot runs on retrospective or synthetic cases, exposing no protected health information until governance is demonstrated. VGC-Health is positioned as a <em>consumer of and contributor to</em> national digital-health infrastructure (identity spine, FHIR interoperability) — an epistemic layer above the substrate, not a competing platform.</p>
+
+  <h2><span class="n">8</span>Threats to validity</h2>
+  <ul>
+    <li><b>The oracle is the hard part.</b> VGC's own caveat applies with full force: in domains where the oracle is as hard to build as the system, the gate degrades. Much of medicine is such a domain. The multi-oracle stack is a mitigation, not a guarantee; where no oracle exists, the honest answer is deferral.</li>
+    <li><b>Adoption risk.</b> The premise is that clinicians will contribute in natural language. If elicitation friction is too high, or the gate feels adversarial, the loop stalls — which is why v0 measures latency and reviewer-agreement as primary endpoints.</li>
+    <li><b>Single narrow pilot.</b> One protocol, a few clinicians, no live patients. Results are an existence proof of the mechanism, not a population claim about clinical benefit.</li>
+    <li><b>Second-reviewer scarcity.</b> H1(c) leans on a second clinician; in under-resourced settings that reviewer may not exist — itself a measured constraint rather than an assumed input.</li>
+    <li><b>Author as proposer.</b> This is a design proposal by the methodology's author; independent replication and re-estimation are explicitly invited.</li>
+  </ul>
+
+  <h2><span class="n">9</span>Call to clinicians &amp; health professionals</h2>
+  <p>The contribution path is built around clinical judgment, not technical skill: you state a rule, pattern, or observation in your own words; the gate checks it and returns a legible verdict; you revise by pointing at exactly what changed. The scarce engineering sits at the oracle layer, out of your way. If you are a physician, nurse, allied-health professional, epidemiologist, HTA analyst, or device/robotics clinician-engineer and this loop is one you would use, this proposal is an open invitation to help build and stress-test the first narrow slice — and to falsify it if it does not hold. Try the <a href="#studio">Prompt Studio</a> above on a problem you know. <em>The idea is to discuss, not to debate.</em></p>
+
+  </section>
+
+  <hr>
+
+  <!-- ===================== CITE / LICENCE ===================== -->
+  <h2 id="cite"><span class="n">10</span>How to cite, licences, and provenance</h2>
+  <div class="cite">
+    <span class="lab">Cite this proposal as</span>
+    <code id="citetext">Choudhary, A. (2026). VGC-Health: A Verification-Gated Clinical Co-Development Manifold — A Research Proposal (1.0.0). Zenodo. https://doi.org/10.5281/zenodo.21303401</code>
+    <button class="copybtn" onclick="copyCite()">⧉ Copy citation</button>
+  </div>
+  <p>Read alongside the parent methodology: <em>Choudhary, A. (2026). Verification-Gated Human–AI Co-Development: A Methodology and Cost Analysis (1.0.0). Zenodo.</em> <a href="https://doi.org/10.5281/zenodo.21264248">doi:10.5281/zenodo.21264248</a> · <a href="https://obonac.github.io/vgc-methodology.html">companion paper</a>.</p>
+
+  <h3>10.1 Licences — one size does not fit all</h3>
+  <p>Different parts of this work carry different licences, because CC-BY-SA-4.0 alone does not fit code, data, or patentable methods. Copyright © 1993–2026 Abhishek Choudhary. All rights reserved, except as granted below.</p>
+  <div class="lic">
+    <div class="card"><div class="w">Written content</div><span class="spdx">CC-BY-SA-4.0</span><p>The paper text, figures and tables. Share and adapt with attribution; derivatives share-alike.</p></div>
+    <div class="card"><div class="w">Software &amp; scripts</div><span class="spdx">GPL-3.0-or-later</span><p>The seed/publish tooling and any reference code. Copyleft; source stays open.</p></div>
+    <div class="card"><div class="w">Metadata &amp; schemas</div><span class="spdx">CC0-1.0</span><p>Citation files, DOI metadata and axis schemas — dedicated to the public domain for frictionless reuse.</p></div>
+    <div class="card"><div class="w">Methods &amp; inventions</div><span class="spdx">Proprietary — patents reserved</span><p>Novel methods may be patentable and are offered under separate commercial terms. AyeAI provides consulting on patent strategy and filing.</p></div>
+  </div>
+  <p style="font-size:.86rem;color:var(--soft)"><b>Precedence.</b> Where the "all rights reserved" notice and an open licence above appear to conflict for a given file, the <em>specific open licence for that file's category governs that file</em>; the reserved-rights notice covers everything not so granted (notably the patentable methods).</p>
+
+  <h3>10.2 Provenance: how the DOI and timestamp were minted</h3>
+  <p>Published through an open, reproducible pipeline (Misty DOI + OpenTimestamps), the same one used across this research programme:</p>
+  <pre><span class="g"># one canonical metadata file drives everything</span>
+misty validate  misty.json
+misty publish   --dry-run            <span class="g"># builds the package, touches nothing</span>
+<span class="g"># — gated, irreversible: typed MINT confirmation on the author's machine —</span>
+misty publish                        <span class="g"># mints the permanent Zenodo DOI</span>
+misty ots stamp vgc-health.html      <span class="g"># OpenTimestamps proof → provenance/*.ots</span></pre>
+  <p>The dry-run runs offline with no side effects; the real mint is gated behind an explicit typed confirmation; the OpenTimestamps <code>.ots</code> proof anchors the document's SHA-256 to the Bitcoin blockchain — an independent, third-party-verifiable proof of existence-by date. The one-shot script (<code>vgc_health_seed.sh</code>) that pushes to GitHub Pages, mints the DOI and adds the timestamp ships with the release and is <em>safe-by-default</em>: run with no flags it validates and dry-runs only.</p>
+  <div class="callout warn">
+    <span class="lab">Please use the DOI for citations</span>
+    <p>Cite the DOI above, not this URL — the DOI is permanent and version-resolved; the page URL may move. Independent replication, re-estimation, and falsification are explicitly invited.</p>
+  </div>
+
+  <h2><span class="n">R</span>References</h2>
+  <ol class="refs">
+    <li id="r0">Choudhary, A. <em>VGC-Health: A Verification-Gated Clinical Co-Development Manifold — A Research Proposal.</em> Zenodo, 2026. <a href="https://doi.org/10.5281/zenodo.21303401">doi:10.5281/zenodo.21303401</a>. (This document.)</li>
+    <li id="r1">Choudhary, A. <em>Verification-Gated Human–AI Co-Development: A Methodology and Cost Analysis.</em> Zenodo, 2026. <a href="https://doi.org/10.5281/zenodo.21264248">doi:10.5281/zenodo.21264248</a>. (Parent methodology; the six primitives and the parity-oracle gate extended here.)</li>
+    <li>Beck, K. <em>Test-Driven Development: By Example.</em> Addison-Wesley, 2002.</li>
+    <li>Avižienis, A. &amp; Chen, L. <em>An experiment in software reliability: the N-version programming approach.</em> IEEE Trans. Reliability, 1978/1985.</li>
+    <li>Landis, J.R. &amp; Koch, G.G. <em>The measurement of observer agreement for categorical data.</em> Biometrics, 1977.</li>
+    <li>HL7 FHIR. <em>Fast Healthcare Interoperability Resources.</em></li>
+    <li>Practitioner research discussion on digital health &amp; AI adoption, 2026 (referenced anonymously as the design brief in §1).</li>
+  </ol>
+
+</div>
+
+<footer>
+  <div class="share" id="shareBottom"></div>
+  <p><strong>Copyright © 1993–2026 Abhishek Choudhary. All rights reserved</strong>, except as granted under the per-category licences in §10.1. This proposal, its figures, tables and text are the author's own work, developed in collaboration with an AI system (Anthropic Claude) operating under the verification-gated protocol it describes. Sole authorship.</p>
+  <p style="color:var(--faint);font-size:.8rem">Research proposal · not yet peer-reviewed · prepared 2026 · a companion to the VGC methodology · typeset in Newsreader, Spectral &amp; IBM Plex Mono.</p>
+</footer>
+
+<div id="aibar" role="menu" aria-label="Ask an AI about the selection">
+  <div class="row"><span class="hint">Ask&nbsp;AI&nbsp;▾</span><span class="sep"></span>
+    <button class="brand-claude" data-p="claude">Claude</button>
+    <button class="brand-gpt" data-p="chatgpt">ChatGPT</button>
+    <button class="brand-plx" data-p="perplexity">Perplexity</button>
+    <span class="sep"></span><button data-p="copy">⧉ Copy prompt</button>
+  </div>
+</div>
+<div id="toast"></div>
+
+<script>
+(function(){
+  "use strict";
+  /* canonical published locations (used even during local file:// preview) */
+  var CANON_URL   = 'https://obonac.github.io/vgc-health.html';
+  var CONTRACT_URL= 'https://obonac.github.io/vgc-health/CONTRACT.md';
+  var PARENT_DOI  = 'https://doi.org/10.5281/zenodo.21264248';
+  var TITLE       = 'VGC-Health: A Verification-Gated Clinical Co-Development Manifold';
+
+  var toastEl = document.getElementById('toast');
+  function toast(m){ toastEl.textContent=m; toastEl.classList.add('show'); clearTimeout(toastEl._t); toastEl._t=setTimeout(function(){toastEl.classList.remove('show');},2200); }
+  var providers = {
+    claude:     function(p){ return 'https://claude.ai/new?q=' + encodeURIComponent(p); },
+    chatgpt:    function(p){ return 'https://chatgpt.com/?q=' + encodeURIComponent(p); },
+    perplexity: function(p){ return 'https://www.perplexity.ai/search?q=' + encodeURIComponent(p); }
+  };
+  function contractHeader(){
+    return [
+'== CONTEXT CONTRACT (read before answering) ==',
+'This concerns "'+TITLE+'": a proposal to let clinicians contribute to a shared, gated clinical knowledge "manifold" WITHOUT writing code, by extending the Verification-Gated Human-AI Co-Development (VGC) methodology into healthcare.',
+'Ground yourself first; do not assume meanings:',
+'  • Proposal: '+CANON_URL,
+'  • Context contract: '+CONTRACT_URL,
+'  • Parent VGC methodology (defines "gate", "parity oracle", the six primitives): '+PARENT_DOI,
+'Terms like "manifold", "gate", "oracle", "honest deferral", "VGC" are DEFINED there. If you cannot open a link, say so rather than guessing. Be rigorous and honest; surface disagreements and threats to validity; do not flatter. Norm: discuss, do not debate.'
+    ].join('\n');
+  }
+
+  /* ---------- selection toolbar ---------- */
+  var bar=document.getElementById('aibar'), lastSel='';
+  function getSel(){ var s=window.getSelection(); return s?String(s).trim():''; }
+  function hideBar(){ bar.style.display='none'; }
+  function selPrompt(sel){
+    return contractHeader()+'\n\n== SELECTED PASSAGE ==\n"'+sel+'"\n\n== MY QUESTION / TASK ==\n(write your question here)';
+  }
+  function place(px,py){
+    bar.style.display='block';
+    var bw=bar.offsetWidth||360;
+    var left=Math.max(window.scrollX+8, Math.min(px-bw/2, window.scrollX+document.documentElement.clientWidth-bw-8));
+    bar.style.top=py+'px'; bar.style.left=left+'px';
+  }
+  function showBar(){
+    var s=window.getSelection(); if(!s||s.rangeCount===0){hideBar();return;}
+    var txt=getSel(); if(txt.length<3){hideBar();return;}
+    lastSel = txt.length>4000 ? txt.slice(0,4000)+'…' : txt;
+    var r=s.getRangeAt(0).getBoundingClientRect(); if(!r||(r.width===0&&r.height===0)){hideBar();return;}
+    bar.style.display='block'; var bh=bar.offsetHeight||40;
+    var top=window.scrollY+r.top-bh-10; if(top<window.scrollY+4) top=window.scrollY+r.bottom+10;
+    place(window.scrollX+r.left+r.width/2, top);
+  }
+  document.addEventListener('mouseup',function(){setTimeout(showBar,10);});
+  document.addEventListener('mousedown',function(e){ if(!bar.contains(e.target)) hideBar(); });
+  document.addEventListener('scroll',hideBar,{passive:true});
+  document.addEventListener('contextmenu',function(e){
+    var txt=getSel(); if(txt.length>=3){ e.preventDefault(); lastSel=txt.length>4000?txt.slice(0,4000)+'…':txt; place(e.pageX,e.pageY+12); }
+  });
+  bar.addEventListener('click',function(e){
+    var b=e.target.closest('button'); if(!b) return;
+    var which=b.getAttribute('data-p'), p=selPrompt(lastSel||getSel()||'(no passage selected)');
+    if(which==='copy'){ navigator.clipboard.writeText(p).then(function(){toast('Prompt copied — paste into any AI');},function(){toast('Copy failed');}); }
+    else if(providers[which]){ window.open(providers[which](p),'_blank','noopener'); toast('Opening '+which+' with full context…'); }
+    hideBar();
+  });
+
+  /* ---------- citation copy ---------- */
+  window.copyCite=function(){ var t=document.getElementById('citetext').textContent; navigator.clipboard.writeText(t).then(function(){toast('Citation copied');},function(){toast('Copy failed');}); };
+
+  /* ---------- Prompt Studio ---------- */
+  var AREAS = [
+    'Medical education','Primary care','Secondary care','Tertiary care',
+    'The clinical encounter','Longitudinal health records','Interoperability (FHIR)',
+    'Epidemiology','Drug development support','Device development support',
+    'Hospital management','Billing & insurance','Para-clinical disciplines',
+    'Pharma','Diagnostics','Telemedicine','Personal practice setup',
+    'A specialty / superspecialty','Health-for-all (access & equity)'
+  ];
+  var STAGES = [
+    {name:'0 · Requirements', hint:'Pin down what you are building and how you will know it is right — no design yet.',
+     body:'STAGE 0 — REQUIREMENTS & PRE-ARCHITECTURE.\nHelp me elicit and pin down the requirements for the area below. Produce: (a) a crisp problem statement, (b) the constraints, (c) the *oracles* — how each requirement will be checked/verified, (d) explicit non-goals, and (e) a short context contract. Do NOT propose architecture or code yet. Ask me clarifying questions where my intent is ambiguous.'},
+    {name:'1 · Architecture', hint:'Lay out the three non-collapsing axes and the canonical source of truth.',
+     body:'STAGE 1 — ARCHITECTURE.\nPropose an architecture for the area below. Position every element on the three non-collapsing axes (domain: mind/body/society; care-setting; system). Name the canonical source of truth, what will be the reference, and what will be the independent verifier. Keep axes orthogonal — never fold one into another.'},
+    {name:'2 · Reference draft', hint:'First version, every clinical rule grounded in a retrieved guideline.',
+     body:'STAGE 2 — REFERENCE DRAFT.\nDraft the first version (spec or rules) for the area below. Ground EACH clinical rule in a retrieved, current guideline and cite it; do not rely on memory. Flag anything you cannot ground as "Open — Honest Deferral" rather than guessing. State every assumption explicitly.'},
+    {name:'3 · The gate', hint:'Build the multi-oracle that must pass before anything is accepted.',
+     body:'STAGE 3 — THE GATE (MULTI-ORACLE).\nDesign the verification gate for the area below: (a) guideline-conformance oracle, (b) outcome-regression oracle where data exists, (c) second-clinician review, (d) parity check for any deterministic sub-logic (dose/eligibility/coding). For each accepted item, show the specific oracle that confirms it. Nothing is accepted without a passing applicable oracle.'},
+    {name:'4 · Verify loop', hint:'Gate every artifact; repair only by exact anchor; defer honestly.',
+     body:'STAGE 4 — VERIFY LOOP.\nRun the loop for the area below: for each artifact apply the gate; if it fails, return the failing oracle output and patch by EXACT ANCHOR only (no whole-file/whole-entry regeneration). Never mark unverified work as done. Maintain a visible list of open/deferred items.'},
+    {name:'5 · Reconcile', hint:'Re-adopt canonical state and latest guidelines; diff to zero.',
+     body:'STAGE 5 — SOURCE-OF-TRUTH RECONCILIATION.\nReconcile the current work for the area below against (a) the canonical state and (b) the LATEST guideline versions. Diff to zero; list every drift and its resolution. Treat working against a stale guideline as a defect to be caught here.'},
+    {name:'6 · Package & licence', hint:'Choose licences per artifact; write provenance and citation.',
+     body:'STAGE 6 — PACKAGE & LICENCE.\nPackage the deliverable for the area below. Recommend licences per artifact category (written content, software, metadata, patentable methods) and explain the trade-off between open science and proprietary/patent protection for THIS work. Write a NOTICE, a provenance note, and a citation entry.'},
+    {name:'7 · DOI + OTS', hint:'Metadata, offline dry-run, then the gated mint and timestamp.',
+     body:'STAGE 7 — DOI + OPENTIMESTAMPS.\nPrepare the citable-record step for the area below: draft the DOI metadata (misty.json-style), describe an OFFLINE dry-run, and specify the GATED mint plus `misty ots stamp` for an OpenTimestamps proof. Do NOT perform any irreversible mint; produce a safe-by-default script where irreversible steps require an explicit flag and a typed confirmation.'}
+  ];
+  var selArea=null, selStage=null;
+  function buildStudioPrompt(){
+    var area = selArea!==null ? AREAS[selArea] : '(choose a healthcare area above)';
+    var stage= selStage!==null ? STAGES[selStage] : null;
+    var body = stage ? stage.body : 'STAGE — (choose a stage above).';
+    return contractHeader()
+      + '\n\n== HEALTHCARE AREA ==\n' + area
+      + '\n\n== TASK FOR THIS STAGE ==\n' + body
+      + '\n\n== MY SPECIFICS ==\n(add your protocol, population, constraints, or the artifact from the previous stage here)';
+  }
+  function refresh(){ document.getElementById('genPrompt').value = buildStudioPrompt(); }
+  function mkChips(host, items, cls, onpick){
+    var h=document.getElementById(host);
+    h.innerHTML = items.map(function(it,i){ return '<span class="chip '+cls+'" data-i="'+i+'">'+(it.name||it)+'</span>'; }).join('');
+    h.addEventListener('click',function(e){ var c=e.target.closest('.chip'); if(!c) return;
+      Array.prototype.forEach.call(h.querySelectorAll('.chip'),function(x){x.classList.remove('on');});
+      c.classList.add('on'); onpick(parseInt(c.getAttribute('data-i'),10)); });
+  }
+  mkChips('areaChips', AREAS, 'area', function(i){ selArea=i; refresh(); });
+  mkChips('stageChips', STAGES, 'stage', function(i){ selStage=i; document.getElementById('stageHint').textContent=STAGES[i].hint; refresh(); });
+  refresh();
+  document.querySelector('.studio-actions').addEventListener('click',function(e){
+    var b=e.target.closest('button'); if(!b) return;
+    var which=b.getAttribute('data-p'), p=document.getElementById('genPrompt').value;
+    if(which==='copy'){ navigator.clipboard.writeText(p).then(function(){toast('Prompt copied');},function(){toast('Copy failed');}); }
+    else if(providers[which]){ window.open(providers[which](p),'_blank','noopener'); toast('Opening '+which+'…'); }
+  });
+
+  /* ---------- share buttons (SVG wrapped correctly) ---------- */
+  function ic(d){ return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="'+d+'"/></svg>'; }
+  var P = {
+    x:'M18.9 1.15h3.68l-8.04 9.19L24 22.85h-7.41l-5.8-7.58-6.64 7.58H.46l8.6-9.83L0 1.15h7.6l5.24 6.93zM17.6 20.64h2.04L6.49 3.24H4.3z',
+    li:'M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z',
+    wa:'M.05 24l1.69-6.16a11.87 11.87 0 0 1-1.59-5.95C.16 5.34 5.5 0 12.06 0a11.82 11.82 0 0 1 8.41 3.49 11.82 11.82 0 0 1 3.48 8.42c0 6.56-5.34 11.9-11.9 11.9a11.9 11.9 0 0 1-5.7-1.45zm6.6-3.8c1.68.99 3.28 1.58 5.4 1.58 5.45 0 9.9-4.44 9.9-9.9 0-5.45-4.44-9.9-9.9-9.9-5.46 0-9.9 4.45-9.9 9.9 0 2.24.66 3.92 1.75 5.68l-.99 3.6zM17.4 14.5c-.09-.15-.34-.24-.71-.42-.37-.19-2.2-1.08-2.54-1.21-.34-.12-.59-.19-.83.19-.25.37-.96 1.2-1.18 1.45-.21.24-.43.28-.8.09-.37-.18-1.56-.57-2.98-1.83-1.1-.98-1.85-2.19-2.06-2.56-.22-.37-.02-.57.16-.75.17-.16.37-.43.55-.65.19-.21.24-.37.37-.62.12-.24.06-.46-.03-.65-.09-.18-.83-2-1.14-2.74-.3-.72-.6-.62-.83-.63l-.71-.01c-.24 0-.64.09-.97.46-.34.37-1.29 1.26-1.29 3.07 0 1.81 1.32 3.56 1.5 3.8.18.25 2.6 3.96 6.29 5.55.88.38 1.56.61 2.1.78.88.28 1.68.24 2.31.15.71-.11 2.2-.9 2.51-1.76.31-.87.31-1.61.22-1.77z',
+    fb:'M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.68.24 2.68.24v2.97h-1.51c-1.49 0-1.96.93-1.96 1.89v2.25h3.33l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07z',
+    bs:'M5.8 3.3C8.28 5.17 10.94 8.95 12 11c1.06-2.05 3.72-5.83 6.2-7.7 1.79-1.34 4.69-2.38 4.69.93 0 .66-.38 5.55-.6 6.35-.78 2.75-3.58 3.45-6.06 3.03 4.34.74 5.44 3.18 3.06 5.63-4.53 4.65-6.5-1.17-7-2.66-.09-.27-.14-.4-.14-.29 0-.11-.05.02-.14.29-.5 1.49-2.47 7.31-7 2.66-2.38-2.45-1.28-4.89 3.06-5.63-2.48.42-5.28-.28-6.06-3.03-.22-.8-.6-5.69-.6-6.35 0-3.31 2.9-2.27 4.69-.93z',
+    mail:'M22 4H2v16h20zM4.4 6h15.2L12 12.5zM4 8.3l8 6.5 8-6.5V18H4z',
+    link:'M10.6 13.4a3 3 0 0 0 4.24 0l3.54-3.54a3 3 0 1 0-4.24-4.24l-1.4 1.4 1.4 1.42 1.41-1.42a1 1 0 0 1 1.42 1.42L13.4 12a1 1 0 0 1-1.42 0zm2.8-2.8a3 3 0 0 0-4.24 0l-3.54 3.54a3 3 0 1 0 4.24 4.24l1.4-1.4-1.4-1.42-1.41 1.42a1 1 0 0 1-1.42-1.42L10.6 12a1 1 0 0 1 1.42 0z'
+  };
+  function shareLinks(){
+    var u=encodeURIComponent(CANON_URL), t=encodeURIComponent(TITLE);
+    return [
+      ['Post','https://twitter.com/intent/tweet?text='+t+'&url='+u, P.x],
+      ['LinkedIn','https://www.linkedin.com/sharing/share-offsite/?url='+u, P.li],
+      ['WhatsApp','https://wa.me/?text='+t+'%20'+u, P.wa],
+      ['Facebook','https://www.facebook.com/sharer/sharer.php?u='+u, P.fb],
+      ['Bluesky','https://bsky.app/intent/compose?text='+t+'%20'+u, P.bs],
+      ['Email','mailto:?subject='+t+'&body='+u, P.mail]
+    ];
+  }
+  function renderShare(id){
+    var host=document.getElementById(id); if(!host) return;
+    host.innerHTML = shareLinks().map(function(s){ return '<a href="'+s[1]+'" target="_blank" rel="noopener">'+ic(s[2])+s[0]+'</a>'; }).join('')
+      + '<button data-copy="1">'+ic(P.link)+'Copy link</button>';
+    host.querySelector('[data-copy]').addEventListener('click',function(){ navigator.clipboard.writeText(CANON_URL).then(function(){toast('Link copied');},function(){toast('Copy failed');}); });
+  }
+  renderShare('shareTop'); renderShare('shareBottom');
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+{
+  "upload_type": "publication",
+  "publication_type": "preprint",
+  "title": "VGC-Health: A Verification-Gated Clinical Co-Development Manifold — A Research Proposal",
+  "version": "1.0.0",
+  "language": "eng",
+  "creators": [
+    {
+      "name": "Choudhary, Abhishek",
+      "affiliation": "AyeAI, Hyderabad, India",
+      "orcid": "0009-0002-0684-8320"
+    }
+  ],
+  "description": "A research proposal to let clinicians and other health professionals contribute to a shared, versioned, falsifiable clinical knowledge manifold without writing code, by extending the Verification-Gated Human-AI Co-Development (VGC) methodology into healthcare. Contributions are stated in natural language and routed through a multi-oracle gate (guideline conformance, outcome regression where data exists, second-clinician review, and parity-checking of deterministic sub-logic) before entering a shared manifold. VGC's six collaboration primitives are redefined for a clinical setting and one healthcare-specific primitive is added: a Regulatory Provenance Ledger recording which named, accountable clinician approved which version. The manifold is queried along three non-collapsing axes (domain: mind/body/society; care-setting; system) so a single gated assertion serves specialties and superspecialties, day-care through hospice, hospital management, epidemiology, drug-trial support, health-technology assessment, medical devices and medical robotics. A small, falsifiable pilot with pre-registered success metrics is specified, and threats to validity are stated candidly. The transferable contribution is the gate and a contribution path clinicians will actually use.",
+  "keywords": [
+    "clinical decision support",
+    "verification-gated contribution",
+    "human-AI collaboration",
+    "knowledge manifold",
+    "clinical explainability",
+    "provenance",
+    "digital health",
+    "ABDM",
+    "FHIR interoperability",
+    "multi-oracle verification",
+    "health technology assessment",
+    "medical robotics"
+  ],
+  "license": "cc-by-sa-4.0",
+  "access_right": "open",
+  "notes": "Companion to the VGC methodology (doi:10.5281/zenodo.21264248). Copyright (c) 1993-2026 Abhishek Choudhary. All rights reserved except as granted per category: written content CC-BY-SA-4.0; software GPL-3.0-or-later; metadata CC0-1.0; novel/patentable methods proprietary (patents reserved, consulting via AyeAI). Sole authorship. Provenance via Misty DOI + OpenTimestamps.",
+  "related_identifiers": [
+    {
+      "relation": "isDerivedFrom",
+      "identifier": "10.5281/zenodo.21264248",
+      "resource_type": "publication-preprint",
+      "scheme": "doi"
+    },
+    {
+      "relation": "isDocumentedBy",
+      "identifier": "https://obonac.github.io/vgc-health/CONTRACT.md",
+      "scheme": "url"
+    }
+  ]
+}
